@@ -12,14 +12,17 @@ function Register() {
   const [errors, setErrors] = useState([])
   const [exist,setExist]=useState('')
   const [success,setSuccess]=useState('')
+  const [rateLimit,setRateLimit]=useState('');
 
-  const handleChange = async (e) => {
-    const { name, value } = await e.target
+  const handleChange =  (e) => {
+    const { name, value } = e.target
     setUser({ ...user, [name]: value })
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault()  
+
+    try{
     const res = await axios.post('http://localhost:3000/register', user)
     if(res.data.errors){
 
@@ -36,9 +39,19 @@ function Register() {
       setSuccess("Registered successfully")
       setTimeout(()=>{
         setSuccess('')
+        setUser({username:"",email:"",password:""})
       },4000)
     }
+  }
+  catch(error){
 
+   setRateLimit(<b>Too many requests! please try after 5 minutes</b>)
+
+   setTimeout(()=>{
+    setRateLimit('');
+   },4000)
+    
+  }
   }
 
   return (
@@ -69,7 +82,14 @@ function Register() {
   )
 )}
 
-        <input
+{rateLimit ? (
+  <div className="w-full p-4 mb-4 text-sm text-red-700 bg-red-100 border border-red-400 rounded-lg" role="alert">
+    {rateLimit}
+  </div>
+) : null}
+
+
+        <input value={user.username}
           required
           onChange={handleChange}
           type="text"
@@ -86,7 +106,7 @@ function Register() {
         )}
 
         {/* Email Input */}
-        <input
+        <input value={user.email}
           required
           onChange={handleChange}
           type="text"
@@ -104,7 +124,7 @@ function Register() {
         )}
 
         {/* Password Input */}
-        <input
+        <input value={user.password}
           required
           onChange={handleChange}
           type="password"
