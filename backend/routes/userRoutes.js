@@ -45,12 +45,12 @@ router.post('/register',registerValidator,async(req,res)=>{
 router.post('/login',async(req,res)=>{
     let user=await User.find({username:req.body.username})
 
-    if(user){
+    if(req.body.username!='admin'){
         const isCompare=await bcrypt.compare(req.body.password,user[0].password)
         if(isCompare){
-            jwt.sign({username:user.username,email:user.email},secretKey,{expiresIn:'20s'},(err,token)=>{
+            jwt.sign({username:user.username,email:user.email},secretKey,{expiresIn:'30s'},(err,token)=>{
                 if(err){
-                    console.log(err)
+                    console.log(err)    
                 }
                 else{
                     res.json({token,message:"login successful",username:user[0].username,email:user[0].email})
@@ -64,7 +64,7 @@ router.post('/login',async(req,res)=>{
         
     }
     else{
-        res.json("User not found")
+        res.json("admin")
     }
 })
 

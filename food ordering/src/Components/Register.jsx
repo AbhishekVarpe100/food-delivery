@@ -95,7 +95,7 @@ function Register() {
           type="text"
           name="username"
           placeholder="Username"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         {errors.map((err, index) => 
           err.path === 'username' ? (
@@ -112,7 +112,7 @@ function Register() {
           type="text"
           name="email"
           placeholder="Email"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         />
 
         {errors.map((err, index) => 
@@ -130,7 +130,7 @@ function Register() {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         {errors.map((err, index) => 
           err.path === 'password' ? (
@@ -146,7 +146,7 @@ function Register() {
         <input
           type="submit"
           value="Register"
-          className="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300"
+          className="w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300"
         />
       </form>
     </div>

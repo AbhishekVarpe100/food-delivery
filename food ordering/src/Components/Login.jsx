@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './CSS/Animation.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -36,6 +36,18 @@ function Login() {
           },1000)
         },4000)
       }
+      else if(res.data=='admin'){
+        setSuccess('Login successful')
+        setTimeout(()=>{
+          setSuccess('')
+          setTimeout(()=>{
+            navigate('/admin')
+            setTimeout(()=>{
+              window.location.reload()
+            },500)
+          },500)
+        },4000)
+      }
       
     }
     catch(error){
@@ -44,6 +56,8 @@ function Login() {
     }
 
   }
+
+ 
 
   return (
     <div className="flex items-center bg-slate-200 justify-center min-h-screen relative overflow-hidden">
@@ -59,14 +73,18 @@ function Login() {
     {/* Form */}
     <form onSubmit={handleSubmit} className="relative z-10 max-w-md p-6 bg-white rounded-lg shadow-lg space-y-4">
       <strong>Login</strong>
-      {success?success:null}
+      {success ? (
+      <div className="flex items-center justify-center px-4 py-3 mb-4 text-sm font-medium text-green-700 bg-green-100 border border-green-200 rounded-md">
+        {success}
+      </div>
+    ) : null}
       <input
         required
         onChange={handleChange}
         type="text"
         name="username"
         placeholder="Username"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
       />
 
      
@@ -77,13 +95,13 @@ function Login() {
         type="password"
         name="password"
         placeholder="Password"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
       />
 
       <input
         type="submit"
         value="Login"
-        className="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300"
+        className="w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300"
       />
     </form>
     </div>
