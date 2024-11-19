@@ -38,7 +38,7 @@ useEffect(()=>{
         <div className="p-4">
           <h2 className="text-lg font-semibold text-gray-800">{item.name}</h2>
           <div className="text-gray-600 mt-2">
-            <span className="font-bold">Price :</span> {item.price} / item
+            <span className="font-bold">Price :</span> {item.price} Rs. / item
           </div>
           <div className="text-gray-600">
             <span className="font-bold">Quantity Available :</span> {item.quantity} items

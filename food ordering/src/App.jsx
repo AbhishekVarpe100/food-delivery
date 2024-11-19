@@ -15,6 +15,7 @@ import Cart from './Components/Cart'
 import Available_Items from './Components/Available_Items'
 import Orders_cust from './Components/Orders_cust'
 import Item from './Components/Item'
+import Order_panel from './Components/Order_panel'
 function App() {
 
   return (
@@ -33,6 +34,9 @@ function App() {
       <Route index element={<Available_Items></Available_Items>}></Route>
       <Route path='orders' element={<Orders_cust></Orders_cust>}></Route>  
       <Route path='/main_home/:id' element={<Item></Item>}></Route>
+      <Route path='/main_home/order/:id' element={<Order_panel></Order_panel>}></Route>
+      
+      
       {/* Nested routes */}
       </Route>
 

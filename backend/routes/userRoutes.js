@@ -123,4 +123,14 @@ router.delete('/delete-item/:id',async(req,res)=>{
     })
 })
 
+router.get('/get-item',async(req,res)=>{
+    const {id}=req.query;
+    const data=await Food.findById(id)
+    res.json(data)
+})
+
+router.post('/confirm-order',async(req,res)=>{
+    console.log(req.body)
+})
+
 module.exports=router
