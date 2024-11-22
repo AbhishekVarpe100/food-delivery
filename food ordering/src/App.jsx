@@ -16,6 +16,8 @@ import Available_Items from './Components/Available_Items'
 import Orders_cust from './Components/Orders_cust'
 import Item from './Components/Item'
 import Order_panel from './Components/Order_panel'
+import Update_Price from './Components/admin/Update_Price'
+import Update_quantity from './Components/admin/Update_quantity'
 function App() {
 
   return (
@@ -48,7 +50,9 @@ function App() {
       <Route path='/admin' element={<Admin></Admin>}>
       <Route path="/admin/*" element={<Admin_routes></Admin_routes>}></Route>
       <Route index element={<Available></Available>}></Route>   {/* defeult route */}
-      
+      <Route path='/admin/update-price/:id' element={<Update_Price></Update_Price>}></Route>
+      <Route path='/admin/update-quantity/:id' element={<Update_quantity></Update_quantity>}></Route>
+
       </Route>
 
 

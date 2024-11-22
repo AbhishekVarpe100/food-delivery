@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {Link} from'react-router-dom'
 function Available() {
 
   const [data,setData]=useState([]);
@@ -47,7 +48,11 @@ useEffect(()=>{
             <span className="font-bold">Quantity Available :</span> {item.quantity}
           </div>
           <div>
-            <button onClick={()=>handlDelete(item._id)} className='bg-red-600 transition duration-300 rounded-lg hover:bg-red-500 text-white px-2'>Delete</button>
+            <button onClick={()=>handlDelete(item._id)} className='bg-red-600 transition duration-300 rounded-lg hover:bg-red-500 m-2 text-white px-2'>Delete</button><br />
+            <Link className='bg-blue-600 transition duration-300 rounded-lg hover:bg-blue-500 text-white px-2' to={`/admin/update-price/${item._id}`}>Update Price</Link><br />
+            <br />
+            
+            <Link className='bg-blue-600 transition duration-300 rounded-lg hover:bg-blue-500 text-white px-2' to={`/admin/update-quantity/${item._id}`}>Update Quantity</Link>
           </div>
         </div>
       </div>

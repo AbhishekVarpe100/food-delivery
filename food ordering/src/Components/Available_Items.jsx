@@ -24,10 +24,10 @@ useEffect(()=>{
       
   {data.length > 0 ? (
     
-    data.map((item) => (
+    data.map((item) => (<div key={item._id}>
         <Link to={`/main_home/${item._id}`}>
       <div
-        key={item._id}
+        
         className="bg-white shadow-lg rounded-lg overflow-hidden w-64 transform transition duration-300 hover:scale-105"  
       >
         <img loading='lazy'
@@ -46,7 +46,7 @@ useEffect(()=>{
           
         </div>
       </div>
-      </Link>))  
+      </Link></div>))  
    ) : (
     <div className="text-gray-500 text-lg font-semibold mt-8">No food items are found </div>
   )}

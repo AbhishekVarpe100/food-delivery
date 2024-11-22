@@ -7,6 +7,7 @@ const path=require('path')
 require('../Connection')
 const User=require('../models/User')
 const Food=require('../models/Food')
+const Order=require('../models/Order')
 
 const secretKey='food-delivery-web-app';
 
@@ -130,7 +131,43 @@ router.get('/get-item',async(req,res)=>{
 })
 
 router.post('/confirm-order',async(req,res)=>{
-    console.log(req.body)
+
+    const { name, phone, address ,item,price,quantity,av_quantity,username}=req.body;
+    try{
+
+        const order=new Order({cust_name:name,mobile:phone,addr:address,item_name:item,price,quantity,username})
+        await order.save();
+        await Food.updateOne({name:item},{$set:{quantity:`${Number.parseInt(av_quantity-quantity)}`}})
+        res.json('confirm')
+    }
+    catch(err){
+        console.log(err)
+    }
+
+})
+
+
+
+router.put('/update-quantity',async(req,res)=>{
+    
+    const {quantity,id,av_quantity}=req.body;
+    await Food.updateOne({_id:id},{$set:{quantity:Number.parseInt(av_quantity)+Number.parseInt(quantity)}})
+    res.json('updated')
+    // console.log(id,quantity,av_quantity)
+    
+})
+
+router.put('/update-price',async(req,res)=>{
+    const {price,id,prev_price}=req.body;
+    await Food.updateOne({_id:id},{price:price})
+    res.json('updated')
+})
+
+
+router.get('/get-orders',async(req,res)=>{
+    const username=req.query.username;
+    const data=await Order.find({username:username})
+    res.json(data)
 })
 
 module.exports=router
