@@ -49,20 +49,20 @@ function NavBar(){
               </Link>
     
               {/* Cart Icon */}
-              <Link to="/cart" className="relative">
+              {username!='undefined'?<Link to="/cart" className="relative">
                 <FaShoppingCart
                   title="Cart"
                   className="text-gray-300 w-6 h-6 hover:text-green-400 transition duration-300"
                 />
-              </Link>
+              </Link>:null}
     
               {/* User Info */}
-              <div className="text-gray-300 font-medium">
+              {username!='undefined'?<div className="text-gray-300 font-medium">
                 <span className="block">{username}</span>
                 <span className="block text-sm text-gray-400">
                   {localStorage.getItem('email')}
                 </span>
-              </div>
+              </div>:null}
             </div>
           ) : (
             <>
