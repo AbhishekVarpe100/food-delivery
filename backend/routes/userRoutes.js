@@ -200,7 +200,6 @@ router.delete('/remove-cart/:id',async(req,res)=>{
     await Cart.findByIdAndDelete(id)
     res.json('deleted')
     
-
 })
 
 module.exports=router

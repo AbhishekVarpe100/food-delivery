@@ -18,6 +18,7 @@ import Item from './Components/Item'
 import Order_panel from './Components/Order_panel'
 import Update_Price from './Components/admin/Update_Price'
 import Update_quantity from './Components/admin/Update_quantity'
+import Image from './Components/Image'
 function App() {
 
   return (
@@ -44,6 +45,7 @@ function App() {
 
 
       <Route path='/cart' element={<Cart></Cart>}></Route>
+      <Route path='/cart/:file' element={<Image></Image>}></Route>
 
 
 {/* nested routes for admin */}
