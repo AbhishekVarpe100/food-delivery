@@ -21,6 +21,9 @@ const foodSchema=new Schema({
         type:String,
         required:true
     },
+    cart_status:{
+        type:String,
+    }
 })
 
 // Create the food model

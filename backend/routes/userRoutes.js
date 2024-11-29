@@ -11,7 +11,8 @@ const Order=require('../models/Order')
 
 const secretKey='food-delivery-web-app';
 
-const {body,validationResult}=require('express-validator')
+const {body,validationResult}=require('express-validator');
+const Cart = require('../models/Cart');
 const registerValidator=[
     body('username','Minimum length 6 characters required').isLength({min:6}),
     body('email','Invalid email address').isEmail(),
@@ -174,6 +175,32 @@ router.delete('/delete-order/:id',async(req,res)=>{
     const id=req.params.id;
     await Order.findByIdAndDelete(id)
     res.json('deleted')
+})
+
+
+router.post('/add-to-cart',async(req,res)=>{
+    const data=await Food.findById({_id:req.body.id})
+    const cartItem=new Cart({username:req.body.username,name:data.name,file:data.file,price:data.price})
+    cartItem.save()
+    await Food.findByIdAndUpdate({_id:req.body.id},{$set:{cart_status:'added'}})
+    res.json({msg:'added'})
+})
+
+router.get('/get-cart',async(req,res)=>{
+    const username=req.query.username;
+    const data=await Cart.find({username})
+    res.json(data)
+
+})
+
+router.delete('/remove-cart/:id',async(req,res)=>{
+    const id=req.params.id;
+    const data=await Cart.findById(id)
+    await Food.updateOne({name:data.name},{$set:{cart_status:""}})
+    await Cart.findByIdAndDelete(id)
+    res.json('deleted')
+    
+
 })
 
 module.exports=router
