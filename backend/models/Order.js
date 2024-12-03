@@ -7,8 +7,7 @@ const orderSchema=new Schema({
     cust_name:{
         type:String,
         required:true,
-    }
-    ,
+    },
     mobile:{
         type:String,
         required:true,

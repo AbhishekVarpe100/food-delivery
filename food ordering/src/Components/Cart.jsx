@@ -5,6 +5,19 @@ import { Link } from "react-router-dom";
 function Cart() {
   const [data, setData] = useState([]);
   const [render, setRender] = useState(false);
+  const [page,setPage]=useState(false)
+
+  const [orderData,setOrderData]=useState({
+    full_name:"",
+    mobile:"",
+    address:"",
+    username:localStorage.getItem('username')
+  })
+
+  const handleChange=(e)=>{
+    const {name,value}=e.target;
+    setOrderData({...orderData,[name]:value})
+  }
 
   async function getData() {
     const res = await axios.get("http://localhost:3000/get-cart", {
@@ -19,10 +32,19 @@ function Cart() {
       setRender((prev) => !prev);
     }
   }
+  const handleOrder=async(e)=>{
+    e.preventDefault();
+    const res=await axios.post('http://localhost:3000/confirm-all-order',orderData)
+    if(res.data=='ordered'){
+      alert("Order confirm")
+    }
+
+    
+  }
 
   useEffect(() => {
     getData();
-  }, [render]);
+  }, [render,page]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
@@ -39,7 +61,7 @@ function Cart() {
       ) : (
         // Cart Table
         <div className="w-full max-w-5xl bg-white shadow-md rounded-lg overflow-hidden">
-          <table className="min-w-full border-collapse">
+          {!page?<table className="min-w-full border-collapse">
             <thead>
               <tr className="bg-green-100 text-left text-gray-700 uppercase text-sm font-semibold">
                 <th className="p-4 border-b-2 border-gray-300">Image</th>
@@ -87,7 +109,82 @@ function Cart() {
                 </tr>
               ))}
             </tbody>
-          </table>
+            <tfoot>
+             <tr><td> <button onClick={()=>setPage(prev_=>!prev_)} className="bg-green-400 text-white font-bold">Order all</button></td></tr>
+            </tfoot>
+          </table>:<>
+  <button
+    onClick={() => setPage((prev_) => !prev_)}
+    className="mb-4 px-5 py-2 bg-blue-50 text-blue-700 border border-blue-400 rounded-lg shadow hover:bg-blue-100 transition duration-300"
+  >
+    Back
+  </button>
+
+  <form
+   
+    className="bg-gray-50 p-8 max-w-lg mx-auto shadow-lg rounded-xl border border-gray-300"
+  >
+    <h2 className="text-2xl font-semibold text-gray-700 mb-6 text-center">
+      Confirm Your Order
+    </h2>
+    <div className="mb-5">
+      <label
+        htmlFor="full_name"
+        className="block text-base font-medium text-gray-800 mb-2"
+      >
+        Full Name
+      </label>
+      <input
+        required
+        onChange={handleChange}
+        name="full_name"
+        type="text"
+        placeholder="Enter full name"
+        className="w-full px-4 py-2 border border-gray-400 rounded-md focus:ring focus:ring-blue-200 focus:outline-none text-gray-700"
+      />
+    </div>
+    <div className="mb-5">
+      <label
+        htmlFor="mobile"
+        className="block text-base font-medium text-gray-800 mb-2"
+      >
+        Mobile Number
+      </label>
+      <input
+        required
+        onChange={handleChange}
+        name="mobile"
+        type="text"
+        placeholder="Enter mobile number"
+        className="w-full px-4 py-2 border border-gray-400 rounded-md focus:ring focus:ring-blue-200 focus:outline-none text-gray-700"
+      />
+    </div>
+    <div className="mb-6">
+      <label
+        htmlFor="address"
+        className="block text-base font-medium text-gray-800 mb-2"
+      >
+        Home Address
+      </label>
+      <input
+        required
+        onChange={handleChange}
+        name="address"
+        type="text"
+        placeholder="Enter home address"
+        className="w-full px-4 py-2 border border-gray-400 rounded-md focus:ring focus:ring-blue-200 focus:outline-none text-gray-700"
+      />
+    </div>
+    <div>
+      <input  onClick={handleOrder}
+        type="submit"
+        value="Confirm Order"
+        className="w-full bg-blue-600 text-white font-medium py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 cursor-pointer"
+      />
+    </div>
+  </form>
+</>
+}
         </div>
       )}
     </div>

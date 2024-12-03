@@ -202,4 +202,23 @@ router.delete('/remove-cart/:id',async(req,res)=>{
     
 })
 
+
+router.get('/get-orders-data',async(req,res)=>{
+    const data=await Order.find();
+    res.json(data)
+})
+
+router.post('/confirm-all-order',async(req,res)=>{
+    const {full_name,mobile,address,username}=req.body;
+    const cart=await Cart.find({username})
+    for(let i=0;i<cart.length;i++){
+        const newOrder=new Order({cust_name:full_name,mobile:mobile,addr:address,item_name:cart[i].name,price:cart[i].price,quantity:'1',username})
+        newOrder.save()
+        await Food.updateOne({name:cart[i].name},{$set:{cart_status:""}})
+       await Cart.findByIdAndDelete({_id:cart[i]._id})
+    }
+
+    res.json("ordered")
+})
+
 module.exports=router
