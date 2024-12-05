@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Item() {
   const { id } = useParams();
   const [data, setData] = useState([]);
   const [render, setRender] = useState(false);
+  const navigate=useNavigate()
 
   const getData = async () => {
     const res = await axios.get("http://localhost:3000/get-item", {
@@ -21,6 +22,9 @@ function Item() {
     });
     if (res) {
       setRender((prev) => !prev);
+      setTimeout(()=>{
+        navigate(-1) 
+      },2000)
     }
   };
 

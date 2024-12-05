@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Cart() {
   const [data, setData] = useState([]);
   const [render, setRender] = useState(false);
   const [page,setPage]=useState(false)
+  const navigate=useNavigate()
 
   const [orderData,setOrderData]=useState({
     full_name:"",
@@ -37,6 +38,9 @@ function Cart() {
     const res=await axios.post('http://localhost:3000/confirm-all-order',orderData)
     if(res.data=='ordered'){
       alert("Order confirm")
+      setTimeout(()=>{
+        navigate(-1)
+      },2000)
     }
 
     

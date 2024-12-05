@@ -26,7 +26,7 @@ function Orders_cust() {
 <div className="overflow-x-auto">
   <table className="min-w-full border-collapse border border-gray-300">
     <thead>
-      <tr className="bg-gray-300">
+      <tr className="bg-blue-300">
         <th className="border border-gray-300 px-4 py-2 text-left text-gray-600 font-medium">Item Name</th>
         <th className="border border-gray-300 px-4 py-2 text-left text-gray-600 font-medium">Quantity</th>
         <th className="border border-gray-300 px-4 py-2 text-left text-gray-600 font-medium">Total Price</th>
@@ -39,7 +39,7 @@ function Orders_cust() {
           <tr
             key={index}
             className={`${
-              index % 2 === 0 ? "bg-white" : "bg-gray-100"
+              index % 2 === 0 ? "bg-white" : "bg-blue-100"
             }`}
           >
             <td className="border border-gray-300 px-4 py-2">{item.item_name}</td>
