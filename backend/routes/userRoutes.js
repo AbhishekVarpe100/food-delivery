@@ -1,5 +1,6 @@
 const express=require('express')
 const router=express.Router();
+const Razorpay = require('razorpay');
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 const fs=require('fs')
@@ -44,6 +45,35 @@ router.post('/register',registerValidator,async(req,res)=>{
 })
 
 
+
+const razorpay = new Razorpay({
+    key_id: 'rzp_test_DTuJNXNxcaHEqZ', // Replace with your Razorpay key ID
+    key_secret: 'bkZZxnjy19Rji0SeqGYYbHf3', // Replace with your Razorpay key secret
+  });
+
+
+
+
+
+
+// Create a payment order
+router.post('/create-order', async (req, res) => {
+    const { amount, currency } = req.body;
+  
+    const options = {
+      amount: amount * 100, // Amount is in paisa, so multiply by 100
+      currency,
+      receipt: 'receipt#1',
+      payment_capture: 1, // Automatically capture the payment
+    };
+  
+    try {
+      const order = await razorpay.orders.create(options);
+      res.json(order);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 
 // login route
 

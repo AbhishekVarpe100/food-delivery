@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams} from 'react-router-dom';
 function Order_panel(){
     const {id}=useParams();
 
@@ -127,11 +127,11 @@ function Order_panel(){
       <div>Available Quantity {data.quantity}</div>
     </div>
     <div>
-      <input 
-        type="submit" 
-        value="Confirm Order" 
-        className="w-full bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600 transition duration-200"
-      />
+
+      <button className="w-full bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600 transition duration-200" >
+      Confirm order
+      </button>
+      
     </div>
   </form>
 </div>

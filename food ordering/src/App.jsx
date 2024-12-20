@@ -19,6 +19,7 @@ import Order_panel from './Components/Order_panel'
 import Update_Price from './Components/admin/Update_Price'
 import Update_quantity from './Components/admin/Update_quantity'
 import Image from './Components/Image'
+
 function App() {
 
   return (
@@ -38,6 +39,8 @@ function App() {
       <Route path='orders' element={<Orders_cust></Orders_cust>}></Route>  
       <Route path='/main_home/:id' element={<Item></Item>}></Route>
       <Route path='/main_home/order/:id' element={<Order_panel></Order_panel>}></Route>
+      
+
       
       
       {/* Nested routes */}

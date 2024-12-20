@@ -56,6 +56,9 @@ function Item() {
                 <p className="text-gray-500">
                   <span className="font-medium">Quantity:</span> {ele.quantity} Items
                 </p>
+                
+                <div>{ele.quantity<=5?<>Hurry up limited quantity left</>:null}</div>
+
                 <div className="space-y-2">
                   <Link to={`/main_home/order/${ele._id}`}>
                     <button className="w-full bg-gradient-to-r from-green-400 to-green-700 text-white font-medium py-2 rounded-full shadow-md hover:from-green-600 hover:to-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
