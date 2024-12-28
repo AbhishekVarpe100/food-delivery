@@ -11,13 +11,15 @@ function Order_panel(){
     const [num,setNum]=useState('');
     const [addr,setAddr]=useState('');
     const [quantity,setQuantity]=useState('');
+    const [rsp,setRsp]=useState(false)
     
     
     const getData=async()=>{
         const res=await axios.get('http://localhost:3000/get-item',{params:{id}})
         setData(res.data)
     }
-    
+
+
     const [price,setPrice]=useState();
 
     const item={
@@ -28,7 +30,8 @@ function Order_panel(){
         price:price,
         quantity:quantity,
         av_quantity:data.quantity,
-        username:localStorage.getItem('username')
+        username:localStorage.getItem('username'),
+        file:data.file
     }
 
 
@@ -42,12 +45,14 @@ function Order_panel(){
    
     const handleSubmit=async(e)=>{
         e.preventDefault()
+        setRsp(true)
         if(Number.parseInt(quantity)>Number.parseInt(data.quantity)){
           alert("Quantity should not greater than available quantity of "+data.quantity)
         }
         else{
           const res=await axios.post('http://localhost:3000/confirm-order',item)
           if(res.data){
+            setRsp(false)
             alert("Order confirm")
             setTimeout(()=>{
               navigate('/main_home')
@@ -129,7 +134,7 @@ function Order_panel(){
     <div>
 
       <button className="w-full bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600 transition duration-200" >
-      Confirm order
+      {rsp?<>Please wait</>:<>Confirm order</>}
       </button>
       
     </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Link} from 'react-router-dom'
 import axios from 'axios';
 
 function Orders_cust() {
@@ -47,14 +48,33 @@ function Orders_cust() {
                 <td className="border border-gray-300 px-6 py-3 text-gray-800">{item.item_name}</td>
                 <td className="border border-gray-300 px-6 py-3 text-gray-800">{item.quantity}</td>
                 <td className="border border-gray-300 px-6 py-3 text-gray-800">{item.price}</td>
-                <td className="border border-gray-300 px-6 py-3 text-center">
-                  <button
-                    onClick={() => handleDelete(item._id)}
-                    className="transition duration-300 hover:bg-red-600 bg-red-500 font-medium px-4 py-2 text-sm rounded-md text-white"
-                  >
-                    Delete
-                  </button>
-                </td>
+                <td className="border border-gray-300 px-6 py-4 text-center">
+  <div className="flex flex-col items-center gap-2">
+    {/* Delete Button */}
+    <button
+      onClick={() => handleDelete(item._id)}
+      className="transition duration-300 ease-in-out hover:bg-red-600 bg-red-500 font-semibold px-4 py-2 text-sm rounded-lg text-white shadow-md hover:shadow-lg"
+    >
+      Delete
+    </button>
+
+    {/* Item Status Link */}
+    <Link
+      to={`/main_home/orders/status/${item._id}`}
+      className="text-blue-600 hover:text-blue-800 text-sm font-medium underline transition duration-200"
+    >
+      Item Status
+    </Link>
+
+    {/* Delivery Status */}
+    {item.delivered ? (
+      <span className="text-green-600 font-medium text-sm">
+        Item Delivered Successfully
+      </span>
+    ) : null}
+  </div>
+</td>
+
               </tr>
             ))
           ) : (

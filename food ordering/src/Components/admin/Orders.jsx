@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Orders() {
@@ -39,7 +40,7 @@ function Orders() {
                 <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.item_name}</td>
                 <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.quantity}</td>
                 <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.price} Rs.</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800"><button className='bg-green-500 p-2 text-white font-bold hover:bg-green-600 transition duration-500'>Dispatch</button></td>
+                <td className="px-4 py-2 border-b text-sm text-gray-800"><Link to={`/admin/orders/update-status/${ele._id}`} className='bg-green-500 p-2 text-white font-bold hover:bg-green-600 transition duration-500'>Update Status</Link></td>
               </tr>
             ))
           ) : (

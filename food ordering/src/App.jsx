@@ -19,6 +19,8 @@ import Order_panel from './Components/Order_panel'
 import Update_Price from './Components/admin/Update_Price'
 import Update_quantity from './Components/admin/Update_quantity'
 import Image from './Components/Image'
+import Status from './Components/Status'
+import Update_Status from './Components/admin/Update_Status'
 
 function App() {
 
@@ -39,10 +41,9 @@ function App() {
       <Route path='orders' element={<Orders_cust></Orders_cust>}></Route>  
       <Route path='/main_home/:id' element={<Item></Item>}></Route>
       <Route path='/main_home/order/:id' element={<Order_panel></Order_panel>}></Route>
+      <Route path='/main_home/orders/status/:id' element={<Status></Status>}></Route>
       
 
-      
-      
       {/* Nested routes */}
       </Route>
 
@@ -57,6 +58,7 @@ function App() {
       <Route index element={<Available></Available>}></Route>   {/* defeult route */}
       <Route path='/admin/update-price/:id' element={<Update_Price></Update_Price>}></Route>
       <Route path='/admin/update-quantity/:id' element={<Update_quantity></Update_quantity>}></Route>
+      <Route path='/admin/orders/update-status/:id' element={<Update_Status></Update_Status>}></Route>
 
       </Route>
 

@@ -31,8 +31,30 @@ const orderSchema=new Schema({
     username:{
         type:String,
         required:true,
-    }
+    },
+    ordered:{
+        type:Boolean,
+        default:false
+    },
+    packed:{
+        type:Boolean,
+        default:false
+    },
+    dispached:{
+        type:Boolean,
+        default:false
+    },
+    shipped:{
+        type:Boolean,
+        default:false
+    },
+    delivered:{
+        type:Boolean,
+        default:false
+    },
+
 })
+
 
 // Create the order model
 const Order = mongoose.model('Order', orderSchema);

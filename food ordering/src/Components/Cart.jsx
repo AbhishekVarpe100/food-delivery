@@ -60,7 +60,7 @@ function Cart() {
         // Empty Cart Message
         <div className="text-gray-600 text-xl font-medium flex flex-col items-center space-y-4">
           <p>Your cart is empty. Start shopping now!</p>
-          <Link
+          <Link title="Go to shop"
             to="/main_home"
             className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
           >

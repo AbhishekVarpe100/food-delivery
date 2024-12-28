@@ -62,23 +62,25 @@ function Available() {
                 <div className="space-y-2">
                   <button
                     onClick={() => handleDelete(item._id)}
-                    className="block w-full bg-red-600 text-white text-center py-2 rounded-md font-medium hover:bg-red-500 transition duration-300"
+                    
                   >
                     Delete
                   </button>
+                  <br />
                   <Link
                     to={`/admin/update-price/${item._id}`}
-                    className="block w-full bg-blue-600 text-white text-center py-2 rounded-md font-medium hover:bg-blue-500 transition duration-300"
+                    
                   >
                     Update Price
                   </Link>
+                  <br />
                   <Link
                     to={`/admin/update-quantity/${item._id}`}
-                    className="block w-full bg-green-600 text-white text-center py-2 rounded-md font-medium hover:bg-green-500 transition duration-300"
+                    
                   >
                     Update Quantity
                   </Link>
-                </div>
+                </div>  
               </div>
             </div>
           ))

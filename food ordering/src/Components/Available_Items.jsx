@@ -19,7 +19,7 @@ function Available_Items() {
     <div className="flex flex-wrap justify-center gap-8 p-6 bg-gray-100 min-h-screen">
       {data.length > 0 ? (
         data.map((item) => (
-          <div key={item._id}>
+          <div title={item.name} key={item._id}>
             <Link to={`/main_home/${item._id}`}>
               <div className="bg-white border border-gray-200 rounded-lg shadow-md w-72 hover:shadow-xl transition-shadow duration-300">
                 <img

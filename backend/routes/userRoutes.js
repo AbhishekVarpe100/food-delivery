@@ -9,10 +9,15 @@ require('../Connection')
 const User=require('../models/User')
 const Food=require('../models/Food')
 const Order=require('../models/Order')
+const axios=require('axios')
 
 const secretKey='food-delivery-web-app';
 
 const {body,validationResult}=require('express-validator');
+
+const nodemailer=require('nodemailer')
+const validator=require('validator')
+
 const Cart = require('../models/Cart');
 const registerValidator=[
     body('username','Minimum length 6 characters required').isLength({min:6}),
@@ -161,15 +166,37 @@ router.get('/get-item',async(req,res)=>{
     res.json(data)
 })
 
+
+
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'abhishekvarpe8@gmail.com',
+    pass: 'cebs vvaf ekpi bzol',
+  },
+});
+
 router.post('/confirm-order',async(req,res)=>{
 
-    const { name, phone, address ,item,price,quantity,av_quantity,username}=req.body;
+    const { name, phone, address ,item,price,quantity,av_quantity,username,file}=req.body;
     try{
 
-        const order=new Order({cust_name:name,mobile:phone,addr:address,item_name:item,price,quantity,username})
+        const order=new Order({cust_name:name,mobile:phone,addr:address,item_name:item,price,quantity,username,ordered:true})
         await order.save();
         await Food.updateOne({name:item},{$set:{quantity:`${Number.parseInt(av_quantity-quantity)}`}})
-        res.json('confirm')
+
+        const user=await User.findOne({username})
+        const email=user.email
+        const to=user.email
+        const subject='Order Confirmed!'
+        const totalPrice=price;
+        const text=`Hello ${name}, You order for item ${item}, quantity ${quantity} is confirmed. It will deliver to you adddress : ${address}. Cash on delivery : ${price} Rs. Thank you for ordering, enjoy the food.😇 `
+
+        const response=await axios.post('http://localhost:3000/demo_',{email,to,subject,text,file})
+        res.json(response.data)
+
+
     }
     catch(err){
         console.log(err)
@@ -177,6 +204,64 @@ router.post('/confirm-order',async(req,res)=>{
 
 })
 
+        
+
+
+router.post('/demo_',async(req,res)=>{
+    const {email, to, subject, text ,file} = req.body;
+    
+
+//   Validate email using the validator library
+  if (!validator.isEmail(to)) {
+    return res.status(400).send('Invalid email address');
+  }
+
+  const mailOptions = {
+    from: 'abhishekvarpe8@gmail.com',
+    to,
+    subject,
+    html: `
+        <div style="font-family: Georgia, serif; line-height: 1.6; color: #2c3e50; max-width: 600px; margin: 0 auto; border: 2px solid #eaeaea; border-radius: 10px; padding: 25px; background-color: #ffffff; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+            <div style="text-align: center; border-bottom: 2px solid #eaeaea; padding-bottom: 15px; margin-bottom: 20px;">
+                <h1 style="text-align: center; color: #4CAF50; font-size: 24px; margin-bottom: 20px;">${subject}</h1>
+                <p style="color: #7f8c8d; font-size: 16px; margin: 0;">A message for you</p>
+            </div>
+            <p style="font-size: 16px; color: #34495e; margin-bottom: 25px;">
+                ${text}
+            </p>
+            <div style="text-align: center; margin: 20px 0;">
+                <img src="cid:unique@image" alt="Attached Image" style="max-width: 90%; height: auto; border: 5px solid #ecf0f1; border-radius: 12px; box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);" />
+            </div>
+            <div style="text-align: center; margin-top: 25px; font-size: 14px; color: #7f8c8d;">
+                
+                <p style="margin: 0;">&copy; 2024 Food Ordering Service. All rights reserved.</p>
+            </div>
+        </div>
+    `,
+    attachments: [
+        {
+            filename: 'image.jpg',
+            path: path.join(__dirname,'../Public/Food_Images', file), // Absolute path
+            cid: 'unique@image'
+        }
+    ]
+};
+
+
+
+//   Send the email
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) return res.status(500).send(`Error: ${err.message}`);
+    res.json('confirmed')
+  });
+
+  // Send the email
+//   transporter.sendMail({ from: 'abhishekvarpe8@gmail.com', to, subject, text }, (err, info) => {
+    // if (err) return res.status(500).send(`Error: ${err.message}`);
+//     res.json('confirmed')
+//   });
+
+})
 
 
 router.put('/update-quantity',async(req,res)=>{
@@ -242,7 +327,7 @@ router.post('/confirm-all-order',async(req,res)=>{
     const {full_name,mobile,address,username}=req.body;
     const cart=await Cart.find({username})
     for(let i=0;i<cart.length;i++){
-        const newOrder=new Order({cust_name:full_name,mobile:mobile,addr:address,item_name:cart[i].name,price:cart[i].price,quantity:'1',username})
+        const newOrder=new Order({cust_name:full_name,mobile:mobile,addr:address,item_name:cart[i].name,price:cart[i].price,quantity:'1',username,ordered:true})
         newOrder.save()
         await Food.updateOne({name:cart[i].name},{$set:{cart_status:""}})
        await Cart.findByIdAndDelete({_id:cart[i]._id})
@@ -250,5 +335,40 @@ router.post('/confirm-all-order',async(req,res)=>{
 
     res.json("ordered")
 })
+
+router.get('/get-status/:id',async(req,res)=>{
+    const id=req.params.id
+    const item=await Order.findOne({_id:id})
+    res.json(item)
+})
+
+// router.put('/update-status/:id',async(req,res)=>{
+//     const {name,checked}=req.body
+//     // const {ordered,packed,dispatched:dispached,shipped,delivered,_id}=req.body;
+//     const id=req.params.id
+//     await Order.updateOne({_id:id},{$set:{[name]:checked}})
+//     console.log(name,checked)
+
+   
+// })
+router.put('/update-status/:id', async (req, res) => {
+    const [ name, checked ] = req.body;
+    // console.log(req.body)
+    const id = req.params.id;
+
+    try {
+        const result = await Order.updateOne(
+            { _id: id },
+            { $set: { [name]: checked } }
+        );
+
+
+        res.status(200).json({ message: 'Order status updated successfully.' });
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
 
 module.exports=router
