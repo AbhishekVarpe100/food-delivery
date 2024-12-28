@@ -26,6 +26,16 @@ const registerValidator=[
 ]
 
 
+
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'abhishekvarpe8@gmail.com',
+      pass: 'cebs vvaf ekpi bzol',
+    },
+  });
+
 // register route
 
 router.post('/register',registerValidator,async(req,res)=>{
@@ -41,12 +51,61 @@ router.post('/register',registerValidator,async(req,res)=>{
             const hashedPass=await bcrypt.hash(password,10)
             const user=new User({username,email,password:hashedPass})
             user.save()
-            res.json({register:'success'})
+            const response=await axios.post("http://localhost:3000/send-mail",{email})
+            res.json({register:response.data})
         }
         else{
             res.json({errors:error.array()})
         } 
     }
+})
+
+
+router.post('/send-mail',async(req,res)=>{
+    const { email: to } = req.body;
+
+    const subject = 'Welcome to Food Ordering Service!';
+    const text = 'Thank you for joining us. We are excited to have you onboard and look forward to serving you.';
+    
+    if (!validator.isEmail(to)) {
+        return res.status(400).send('Invalid email address');
+    }
+
+    const mailOptions = {
+        from: 'abhishekvarpe8@gmail.com',
+        to,
+        subject,
+        html: `
+            <div style="font-family: 'Arial', sans-serif; line-height: 1.8; color: #333333; max-width: 600px; margin: 0 auto; border: 1px solid #dddddd; border-radius: 8px; padding: 20px; background-color: #f9f9f9; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);">
+                <div style="text-align: center; border-bottom: 1px solid #dddddd; padding-bottom: 15px; margin-bottom: 20px;">
+                    <h1 style="color: #2c3e50; font-size: 24px; margin: 0;">Welcome to Food Ordering Service!</h1>
+                    <p style="color: #7f8c8d; font-size: 16px; margin: 5px 0;">The best place for all your food cravings</p>
+                </div>
+                <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
+                    Dear Valued Customer,<br/><br/>
+                    Thank you for registering with <strong>Food Ordering Service</strong>. We are thrilled to have you as part of our growing community of food lovers. Our mission is to provide you with a seamless experience in exploring and ordering from the best restaurants in your area.
+                </p>
+                <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
+                    You can now start browsing through our menu, placing orders, and enjoying exclusive offers tailored just for you. Our team is committed to ensuring a delightful and hassle-free service every time.
+                </p>
+                
+            </div>
+        `
+    };
+    
+    
+    
+    //   Send the email
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) return res.status(500).send(`Error: ${err.message}`);
+        res.json('success')
+      });
+    
+      // Send the email
+    //   transporter.sendMail({ from: 'abhishekvarpe8@gmail.com', to, subject, text }, (err, info) => {
+        // if (err) return res.status(500).send(`Error: ${err.message}`);
+    //     res.json('success')
+    //   });
 })
 
 
@@ -169,13 +228,13 @@ router.get('/get-item',async(req,res)=>{
 
 
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'abhishekvarpe8@gmail.com',
-    pass: 'cebs vvaf ekpi bzol',
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'abhishekvarpe8@gmail.com',
+//     pass: 'cebs vvaf ekpi bzol',
+//   },
+// });
 
 router.post('/confirm-order',async(req,res)=>{
 

@@ -13,6 +13,7 @@ function Register() {
   const [exist,setExist]=useState('')
   const [success,setSuccess]=useState('')
   const [rateLimit,setRateLimit]=useState('');
+  const [rsp,setRsp]=useState(false)
 
   const handleChange =  (e) => {
     const { name, value } = e.target
@@ -21,6 +22,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()  
+    setRsp(true)
 
     try{
     const res = await axios.post('http://localhost:3000/register', user)
@@ -30,12 +32,14 @@ function Register() {
     }
     
     else if(res.data.msg){
+      setRsp(false)
       setExist("Username or email already exist");
       setTimeout(()=>{
         setExist('')
       },4000)
     }
     else if(res.data.register){
+      setRsp(false)
       setSuccess("Registered successfully")
       setTimeout(()=>{
         setSuccess('')
@@ -145,7 +149,7 @@ function Register() {
         {/* Submit Button */}
         <input
           type="submit"
-          value="Register"
+          value={rsp? 'Please Wait':'Register'}
           className="w-full px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300"
         />
       </form>
