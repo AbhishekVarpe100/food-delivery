@@ -191,7 +191,7 @@ router.post('/confirm-order',async(req,res)=>{
         const to=user.email
         const subject='Order Confirmed!'
         const totalPrice=price;
-        const text=`Hello ${name}, You order for item ${item}, quantity ${quantity} is confirmed. It will deliver to your adddress : ${address}. Cash on delivery : ${price} Rs. Thank you for ordering, enjoy the food.😇 `
+        const text=`Hello ${name}, Your order for item ${item}, quantity ${quantity} is confirmed. It will deliver to your adddress : ${address}. Cash on delivery : ${price} Rs. Thank you for ordering, enjoy the food.😇 `
 
         const response=await axios.post('http://localhost:3000/demo_',{email,to,subject,text,file})
         res.json(response.data)
