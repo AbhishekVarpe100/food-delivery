@@ -19,7 +19,7 @@ const Status = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="max-w-lg w-full p-6 bg-white shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          Product Status
+          Order Status
         </h2>
         <div className="relative">
           <div className="absolute left-5 top-0 w-1 h-full bg-gray-300"></div>
