@@ -234,7 +234,7 @@ router.post('/demo_',async(req,res)=>{
             </div>
             <div style="text-align: center; margin-top: 25px; font-size: 14px; color: #7f8c8d;">
                 
-                <p style="margin: 0;">&copy; 2024 Food Ordering Service. All rights reserved.</p>
+                <p style="margin: 0;">&copy; 2025 Food Ordering Service. All rights reserved.</p>
             </div>
         </div>
     `,
