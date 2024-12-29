@@ -21,6 +21,7 @@ import Update_quantity from './Components/admin/Update_quantity'
 import Image from './Components/Image'
 import Status from './Components/Status'
 import Update_Status from './Components/admin/Update_Status'
+import Reviews from './Components/Reviews'
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
       <Route path='/main_home/:id' element={<Item></Item>}></Route>
       <Route path='/main_home/order/:id' element={<Order_panel></Order_panel>}></Route>
       <Route path='/main_home/orders/status/:id' element={<Status></Status>}></Route>
+      <Route path='/main_home/reviews/:id' element={<Reviews></Reviews>}></Route>
       
 
       {/* Nested routes */}

@@ -45,6 +45,7 @@ function Available_Items() {
                   <div className="text-gray-700 mt-2">
                     <span className="font-medium">Quantity Available:</span> {item.quantity} items
                   </div>
+                  
                 </div>
               </div>
             </Link>

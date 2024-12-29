@@ -70,14 +70,15 @@ function Item() {
                     <span className="block text-center text-green-600 font-medium px-2 py-1 bg-green-100 rounded-md">
                       Item added to cart
                     </span>
-                  ) : (
+                  ) : (<>
                     <button
                       className="w-full px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-md transition-colors duration-200"
                       onClick={() => handleCart(ele._id)}
                     >
                       Add to cart
                     </button>
-                  )}
+                    <Link to={`/main_home/reviews/${ele._id}`} className="text-blue-500 font-bold">Reviews</Link>
+                    </>)}
                 </div>
               </div>
             </div>

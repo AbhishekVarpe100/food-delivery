@@ -430,4 +430,48 @@ router.put('/update-status/:id', async (req, res) => {
 });
 
 
+router.post('/post-comment',async(req,res)=>{
+    const {id,username,rating,comment}=req.body
+    const added_review=await Food.findByIdAndUpdate(id,{$push:{reviews:{reviewer:username,rating,comment}}},{new:true})
+    res.json('added')
+})
+
+
+router.get('/get-reviews/:id',async(req,res)=>{
+    const id=req.params.id;
+    const data=await Food.findById(id)
+
+    res.json(data.reviews)
+})
+
+
+
+router.delete('/delete-review', async (req, res) => {
+    try {
+        const { review_id, item_id } = req.query; // Extract food and review identifiers from query params
+
+        // Update the food document to remove the review
+        const result = await Food.findByIdAndUpdate(
+            {_id:item_id}, // The ID of the food item
+            { $pull: { reviews: { _id: review_id } } }, // Remove the review by its unique `_id`
+            { new: true } // Return the updated document
+        );
+
+        if (result) {
+            res.status(200).json({
+                message: 'Review deleted successfully',
+                updatedFood: result,
+            });
+        } else {
+            res.status(404).json({ message: 'Food item or review not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error', error });
+    }
+});
+
+
+
+
 module.exports=router
