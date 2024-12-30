@@ -383,16 +383,72 @@ router.get('/get-orders-data',async(req,res)=>{
 })
 
 router.post('/confirm-all-order',async(req,res)=>{
-    const {full_name,mobile,address,username}=req.body;
+    const {full_name,mobile,address,username,email}=req.body;
     const cart=await Cart.find({username})
+    let items=''
+    let totalPrice=0
     for(let i=0;i<cart.length;i++){
         const newOrder=new Order({cust_name:full_name,mobile:mobile,addr:address,item_name:cart[i].name,price:cart[i].price,quantity:'1',username,ordered:true})
         newOrder.save()
+        items+=`${cart[i].name}, `
+        totalPrice+=Number.parseInt(cart[i].price)
         await Food.updateOne({name:cart[i].name},{$set:{cart_status:""}})
        await Cart.findByIdAndDelete({_id:cart[i]._id})
     }
+    const text=`Hello ${full_name}, Your order for items ${items} is confirmed. It will deliver to your adddress : ${address}. Cash on delivery : ${totalPrice} Rs. Thank you for ordering, enjoy the food.😇 `
+    const resp=await axios.post('http://localhost:3000/send-cart-mail',{to:email,subject:'Order Confirmed!',text})
 
-    res.json("ordered")
+    if(resp.data){
+        res.json("ordered")
+    }
+})
+
+
+
+router.post('/send-cart-mail',async(req,res)=>{
+    const {to, subject, text } = req.body;
+    
+
+    //   Validate email using the validator library
+      if (!validator.isEmail(to)) {
+        return res.status(400).send('Invalid email address');
+      }
+    
+      const mailOptions = {
+        from: 'abhishekvarpe8@gmail.com',
+        to,
+        subject,
+        html: `
+            <div style="font-family: 'Times New Roman', serif; line-height: 1.8; color: #333; max-width: 600px; margin: 20px auto; border: 1px solid #ccc; border-radius: 10px; padding: 30px; background-color: #f9f9f9; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+    <div style="text-align: center; border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 20px;">
+        <h1 style="text-align: center; color: #2c3e50; font-size: 26px; font-weight: bold; margin-bottom: 15px;">${subject}</h1>
+        <p style="color: #555; font-size: 14px; margin: 0; font-style: italic;">A personal message for you</p>
+    </div>
+    <p style="font-size: 16px; color: #444; margin-bottom: 30px; text-align: justify;">
+        ${text}
+    </p>
+    <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #555;">
+        <p style="margin: 0; font-size: 13px;">&copy; 2025 Food Ordering Service. All rights reserved.</p>
+    </div>
+</div>
+
+        `,
+    };
+    
+    
+    
+    //   Send the email
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) return res.status(500).send(`Error: ${err.message}`);
+        res.json('confirmed')
+      });
+    
+      // Send the email
+    //   transporter.sendMail({ from: 'abhishekvarpe8@gmail.com', to, subject, text }, (err, info) => {
+        // if (err) return res.status(500).send(`Error: ${err.message}`);
+    //     res.json('confirmed')
+    //   });
+
 })
 
 router.get('/get-status/:id',async(req,res)=>{

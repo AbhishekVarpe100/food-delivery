@@ -6,6 +6,7 @@ function Cart() {
   const [data, setData] = useState([]);
   const [render, setRender] = useState(false);
   const [page, setPage] = useState(false);
+  const [rsp,setRsp]=useState(false)
   const navigate = useNavigate();
 
   const [orderData, setOrderData] = useState({
@@ -13,6 +14,7 @@ function Cart() {
     mobile: "",
     address: "",
     username: localStorage.getItem("username"),
+    email:localStorage.getItem('email')
   });
 
   const handleChange = (e) => {
@@ -36,9 +38,11 @@ function Cart() {
 
   const handleOrder = async (e) => {
     e.preventDefault();
+    setRsp(true)
     const res = await axios.post("http://localhost:3000/confirm-all-order", orderData);
     if (res.data === "ordered") {
       alert("Order confirmed!");
+      setRsp(false)
       setTimeout(() => {
         navigate(-1);
       }, 2000);
@@ -202,7 +206,7 @@ function Cart() {
                 <div>
                   <input
                     type="submit"
-                    value="Confirm Order"
+                    value={`${rsp?'Please wait':'Confirm order'}`}
                     className="w-full bg-blue-600 text-white font-medium py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 cursor-pointer"
                   />
                 </div>
