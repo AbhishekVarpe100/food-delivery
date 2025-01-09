@@ -5,10 +5,22 @@ import { Link } from 'react-router-dom';
 function Available_Items() {
   const [data, setData] = useState([]);
   const [delete_, setDelete] = useState(false);
+  const [option,setOption]=useState('')
+
 
   async function getData() {
-    const res = await axios("http://localhost:3000/get-data");
+    const res = await axios.get("http://localhost:3000/get-data");
     setData(res.data);
+  } 
+
+  const handleOption=async(e)=>{
+    const option=e.target.value;
+    const res= await axios.get('http://localhost:3000/order-by',{params:{option:option}})
+    if(res.data){
+      setData([])
+      setData(res.data)
+
+    }
   }
 
   useEffect(() => {
@@ -17,6 +29,19 @@ function Available_Items() {
 
   return (
     <div className="flex flex-wrap justify-center gap-8 p-6 bg-gray-100 min-h-screen">
+
+
+      <form>
+
+        <select className='border-2 border-blue-400 rounded-md' onChange={handleOption}>
+          <option value="">---Sort by---</option>
+          <option value="price">Price</option>
+          <option value="quantity">Quantity</option>
+          <option value="name">Item name</option>
+        </select>
+
+
+      </form>
       {data.length > 0 ? (
         data.map((item) => (
           <div title={item.name} key={item._id}>

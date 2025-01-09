@@ -528,6 +528,13 @@ router.delete('/delete-review', async (req, res) => {
 });
 
 
+router.get('/order-by',async(req,res)=>{
+    const option=req.query.option
+    const data=await Food.find().sort({[option]:1}) 
+    res.json(data) 
+})
+
+
 
 
 module.exports=router
