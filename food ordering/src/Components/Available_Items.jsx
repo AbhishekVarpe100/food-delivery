@@ -9,7 +9,7 @@ function Available_Items() {
 
 
   async function getData() {
-    const res = await axios.get("http://localhost:3000/get-data");
+    const res = await axios.get("http://localhost:3000/get-data-cust");
     setData(res.data);
   } 
 

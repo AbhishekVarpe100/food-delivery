@@ -203,6 +203,11 @@ router.get('/get-data',async(req,res)=>{
     res.json(data)
 
 })
+router.get('/get-data-cust',async(req,res)=>{
+    const data=await Food.find();
+    res.json(data)
+
+})
 
 router.delete('/delete-item/:id',async(req,res)=>{
     const id=req.params.id;
