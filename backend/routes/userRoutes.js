@@ -199,7 +199,7 @@ function verifyToken(req,res,next){
 }
 
 router.get('/get-data',async(req,res)=>{
-    const data=await Food.find();
+    const data=await Food.find().limit(3);
     res.json(data)
 
 })
@@ -533,6 +533,31 @@ router.get('/order-by',async(req,res)=>{
     const data=await Food.find().sort({[option]:1}) 
     res.json(data) 
 })
+
+router.post('/next-page', async (req, res) => {
+    const {page}=req.body;
+    var data=await Food.find().limit(page)
+    if(page>3){
+        data=await Food.find().skip(page-3).limit(3)
+    }
+    
+    res.json(data)
+    
+});
+
+router.post('/prev-page',async(req,res)=>{
+    const {page}=req.body;
+    var data=await Food.find().limit(page)
+    if(page>3){
+        data=await Food.find().skip(page-3).limit(3)
+    }
+    else if(page<=0){
+        data=await Food.find().limit(3)
+    }
+    res.json(data)
+
+})
+
 
 
 

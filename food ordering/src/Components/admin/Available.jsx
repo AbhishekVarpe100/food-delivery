@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 function Available() {
   const [data, setData] = useState([]);
   const [delete_, setDelete] = useState(false);
+  const [page,setPage]=useState(3);
 
   async function getData() {
     const res = await axios("http://localhost:3000/get-data");
@@ -18,6 +19,29 @@ function Available() {
     }
   };
 
+  const handleNext = async (e) => {
+    const updatedPage = page + 3; // Calculate the new page value
+    setPage(updatedPage); // Update the state
+
+    const res = await axios.post('http://localhost:3000/next-page', { page: updatedPage });
+    if(res){
+      setData([])
+      setData(res.data)
+    }
+    
+};
+
+  
+  const handlePrevious=async(e)=>{
+    const updatedPage = page - 3; // Calculate the new page value
+    setPage(updatedPage); // Update the state
+    const res=await axios.post('http://localhost:3000/prev-page',{page: updatedPage})
+    if(res){
+      setData([])
+      setData(res.data)
+    }
+  }
+
   useEffect(() => {
     getData();
   }, [delete_]);
@@ -30,7 +54,29 @@ function Available() {
         <p className="text-lg text-gray-600">
           Total items available: <span className="font-semibold">{data.length}</span>
         </p>
+        <div className="flex justify-center space-x-4 mt-6">
+  <button disabled={(page-3)<=0}
+    onClick={handlePrevious}
+    className={`bg-gray-600 text-white py-2 px-6 rounded-lg text-sm font-medium 
+      ${(page-3) <=0 ? 'bg-slate-400 cursor-not-allowed' : 'hover:bg-gray-700'} 
+      focus:outline-none focus:ring-2 focus:ring-gray-500`}
+  >
+    Previous
+  </button>
+  <button
+  onClick={handleNext}  
+  disabled={data.length < 3}
+  className={`bg-gray-600 text-white py-2 px-6 rounded-lg text-sm font-medium 
+    ${data.length < 3 ? 'bg-slate-400 cursor-not-allowed' : 'hover:bg-gray-700'} 
+    focus:outline-none focus:ring-2 focus:ring-gray-500`}
+>
+  Next
+</button>
+
+</div>
       </div>
+
+      
 
       {/* Food Items Section */}
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -89,7 +135,11 @@ function Available() {
             No food items found.
           </div> 
         )}
+
+       
       </div>
+    
+
     </div>
   );
 }
