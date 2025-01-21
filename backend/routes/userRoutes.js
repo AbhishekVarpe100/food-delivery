@@ -564,6 +564,38 @@ router.post('/prev-page',async(req,res)=>{
 })
 
 
+router.get('/get-admin-cart',async(req,res)=>{
+try{
+
+    const data=await Cart.find();
+    // res.json(data)
+    let userNames=data.map((item)=>item.username)
+    let distinctNames=[...new Set(userNames)]
+    res.json(distinctNames)
+
+}
+
+catch(e){
+    console.log(e)
+}
+})
+
+
+
+router.get('/get-data-by-username',async(req,res)=>{
+
+    const username=req.query.username;
+    try {
+
+        let data=await Cart.find({username})
+        res.json(data).status(200)
+        
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
 
 
 
