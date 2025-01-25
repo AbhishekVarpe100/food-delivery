@@ -587,8 +587,13 @@ router.delete('/delete-review', async (req, res) => {
 
 router.get('/order-by',async(req,res)=>{
     const option=req.query.option
-    const data=await Food.find().sort({[option]:1}) 
-    res.json(data) 
+    if(option==""){
+        console.log("invalid sorting")
+    } 
+    else{
+        const data=await Food.find().sort({[option]:1}) 
+        res.json(data)
+    }
 })
 
 router.post('/next-page', async (req, res) => {
