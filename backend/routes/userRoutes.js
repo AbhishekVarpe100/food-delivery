@@ -357,12 +357,64 @@ router.delete('/delete-order/:id',async(req,res)=>{
 })
 
 
+const send_mail=async(username,itemname)=>{
+    let user=await User.find({username})
+    let email=user[0].email
+    let subject='Cart Reminder'
+
+
+    const mailOptions = {
+        from: 'abhishekvarpe8@gmail.com',
+        to:email,
+        subject,
+        html: `
+            <div style="font-family: 'Georgia', serif; line-height: 1.8; color: #333; max-width: 600px; margin: 20px auto; border: 1px solid #ddd; border-radius: 10px; padding: 30px; background-color: #fff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+    <div style="text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 20px;">
+        <h1 style="color: #2c3e50; font-size: 28px; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px;">Item Added to Cart</h1>
+        <p style="color: #555; font-size: 15px; margin: 0; font-style: italic;">Here’s a friendly reminder</p>
+    </div>
+    <p style="font-size: 17px; color: #444; margin-bottom: 30px; text-align: justify;">
+        You’ve added <strong style="color: #2c3e50;">${itemname}</strong> to your cart. Why not complete your purchase now?
+    </p>
+    <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #555;">
+        <p style="margin: 0; font-size: 13px;">&copy; 2025 Food Ordering Service. All rights reserved.</p>
+    </div>
+</div>
+
+        `,
+    };
+    
+    
+    
+    //   Send the email
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err){
+            console.log(err.message)
+
+        }
+        else if(info){
+            console.log(info)
+        }
+      });
+
+
+
+
+}   
+
+
 router.post('/add-to-cart',async(req,res)=>{
     const data=await Food.findById({_id:req.body.id})
     const cartItem=new Cart({username:req.body.username,name:data.name,file:data.file,price:data.price})
     cartItem.save()
     await Food.findByIdAndUpdate({_id:req.body.id},{$set:{cart_status:'added'}})
     res.json({msg:'added'})
+    const user_name=req.body.username
+    const item_name=data.name
+
+    setTimeout(()=>{
+        send_mail(user_name,item_name)
+    },600000)
 })
 
 router.get('/get-cart',async(req,res)=>{
