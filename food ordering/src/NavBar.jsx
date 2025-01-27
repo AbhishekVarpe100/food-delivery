@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaBars, FaTimes } from 'react-icons/fa';
-
+import axios from 'axios'
 function NavBar() {
   const [username, setUser] = useState(localStorage.getItem('username'));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [cartCountTotal,setCount]=useState(0)
 
   const handleLogOut = () => {
     localStorage.removeItem('username');
@@ -17,6 +18,25 @@ function NavBar() {
       }, 500);
     }, 1000);
   };
+
+  const getCartCount=async()=>{
+    try {
+
+      const res=await fetch(`http://localhost:3000/get-cart-count?username=${username}`,{method:'GET'})
+      if(res.ok){
+        let data= await res.json()
+
+        setCount(data.cart_count)
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+    getCartCount()
+  },[])
 
   return (
     <nav className="bg-gradient-to-r from-gray-800 to-gray-900 p-4 shadow-xl">
@@ -61,10 +81,16 @@ function NavBar() {
               {/* Cart Icon */}
               {username !== 'undefined' ? (
                 <Link to="/cart" className="block relative md:inline">
-                  <FaShoppingCart
-                    title="Cart"
-                    className="text-gray-300 w-6 h-6 hover:text-green-400 transition duration-300"
-                  />
+                  <div className="relative">
+                <FaShoppingCart
+                  title={`Cart : ${cartCountTotal} Items`}
+                  className="text-gray-300 w-6 h-6 hover:text-green-400 transition duration-300"
+                />
+                <div className="absolute -top-2 -right-2 bg-green-400 text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+              {cartCountTotal}
+            </div>
+          </div>
+
                 </Link>
               ) : null}
 

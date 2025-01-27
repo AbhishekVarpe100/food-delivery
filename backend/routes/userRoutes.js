@@ -450,7 +450,7 @@ router.post('/confirm-all-order',async(req,res)=>{
         items+=`${cart[i].name}, `
         totalPrice+=Number.parseInt(cart[i].price)
         await Food.updateOne({name:cart[i].name},{$set:{cart_status:""}})
-       await Cart.findByIdAndDelete({_id:cart[i]._id})
+        await Cart.findByIdAndDelete({_id:cart[i]._id})
     }
     const text=`Hello ${full_name}, Your order for items ${items} is confirmed. It will deliver to your adddress : ${address}. Cash on delivery : ${totalPrice} Rs. Thank you for ordering, enjoy the food.😇 `
     const resp=await axios.post('http://localhost:3000/send-cart-mail',{to:email,subject:'Order Confirmed!',text})
@@ -650,6 +650,13 @@ router.get('/get-data-by-username',async(req,res)=>{
     } catch (error) {
         console.log(error);
     }
+})
+
+
+router.get('/get-cart-count',async(req,res)=>{
+    let username=req.query.username
+    let cartData=await Cart.find({username})
+    res.json({"cart_count":cartData.length})
 })
 
 
