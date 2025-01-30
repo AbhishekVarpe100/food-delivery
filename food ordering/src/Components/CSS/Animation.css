@@ -1,78 +1,55 @@
-/* Styles for the animated background */
-.bg-gray-100 {
-    position: relative;
+.ball {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  animation: float 10s infinite ease-in-out;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
   }
-  
-  /* Styles for the balls */
-  .ball {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0;
-    animation: fadeAndMove 8s infinite;
+  25% {
+    transform: translateY(-100px) translateX(100px);
   }
-  
-  /* Positioning the balls */
-  .ball:nth-child(1) {
-    width: 80px;
-    height: 80px;
-    top: 20%;
-    left: 10%;
-    animation-delay: 0s;
+  50% {
+    transform: translateY(0) translateX(200px);
   }
-  
-  .ball:nth-child(2) {
-    width: 60px;
-    height: 60px;
-    top: 50%;
-    left: 40%;
-    animation-delay: 1s;
+  75% {
+    transform: translateY(100px) translateX(100px);
   }
-  
-  .ball:nth-child(3) {
-    width: 50px;
-    height: 50px;
-    top: 30%;
-    right: 20%;
-    animation-delay: 2s;
+  100% {
+    transform: translateY(0) translateX(0);
   }
-  
-  .ball:nth-child(4) {
-    width: 70px;
-    height: 70px;
-    top: 80%;
-    left: 30%;
-    animation-delay: 3s;
-  }
-  
-  .ball:nth-child(5) {
-    width: 40px;
-    height: 40px;
-    top: 60%;
-    right: 10%;
-    animation-delay: 4s;
-  }
-  
-  /* Keyframes for the fading and moving effect */
-  @keyframes fadeAndMove {
-    0% {
-      opacity: 0;
-      transform: translate(0, 0);
-    }
-    25% {
-      opacity: 1;
-      transform: translate(50px, -50px);
-    }
-    50% {
-      opacity: 1;
-      transform: translate(-50px, 50px);
-    }
-    75% {
-      opacity: 1;
-      transform: translate(0, 0);
-    }
-    100% {
-      opacity: 0;
-      transform: translate(0, 0);
-    }
-  }
-  
+}
+
+.ball:nth-child(1) {
+  top: 10%;
+  left: 10%;
+  animation-duration: 8s;
+}
+
+.ball:nth-child(2) {
+  top: 20%;
+  left: 50%;
+  animation-duration: 12s;
+}
+
+.ball:nth-child(3) {
+  top: 70%;
+  left: 30%;
+  animation-duration: 10s;
+}
+
+.ball:nth-child(4) {
+  top: 50%;
+  left: 80%;
+  animation-duration: 14s;
+}
+
+.ball:nth-child(5) {
+  top: 80%;
+  left: 60%;
+  animation-duration: 9s;
+}

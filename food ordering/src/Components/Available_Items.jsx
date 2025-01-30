@@ -27,60 +27,62 @@ function Available_Items() {
   }, [delete_]);
 
   return (
-    <div className="flex flex-wrap justify-center gap-8 p-6 bg-gray-100 min-h-screen">
+    <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
+  {/* Sorting Dropdown */}
+  <form className="mb-8">
+    <select
+      className="border-2 border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-blue-500 transition-colors duration-300"
+      onChange={handleOption}
+    >
+      <option value="">---Sort by---</option>
+      <option value="price">Price</option>
+      <option value="quantity">Quantity</option>
+      <option value="name">Item name</option>
+    </select>
+  </form>
 
-
-      <form>
-
-        <select className='border-2 border-blue-400 rounded-md' onChange={handleOption}>
-          <option value="">---Sort by---</option>
-          <option value="price">Price</option>
-          <option value="quantity">Quantity</option>
-          <option value="name">Item name</option>
-        </select>
-
-
-      </form>
-      {data.length > 0 ? (
-        data.map((item) => (
-          <div title={item.name} key={item._id}>
-            <Link to={`/main_home/${item._id}`}>
-              <div className="bg-white border border-gray-200 rounded-lg shadow-md w-72 hover:shadow-xl transition-shadow duration-300">
-                <img
-                  loading="lazy"
-                  src={`http://localhost:3000/Food_Images/${item.file}`}
-                  alt={item.name}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
-                <div className="p-5">
-                  <h2 className="text-xl font-serif text-gray-800 mb-2">
-                    {item.name}
-                  </h2>
-                  <div className="text-gray-700 mb-2">
-                    <span className="font-medium">Price:</span> {item.price} Rs. / item
+  {/* Items Grid */}
+  {data.length > 0 ? (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {data.map((item) => (
+        <div title={item.name} key={item._id}>
+          <Link to={`/main_home/${item._id}`}>
+            <div className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 transform hover:-translate-y-1">
+              {/* Image */}
+              <img
+                loading="lazy"
+                src={`http://localhost:3000/Food_Images/${item.file}`}
+                alt={item.name}
+                className="w-full h-56 object-cover rounded-t-lg"
+              />
+              {/* Content */}
+              <div className="p-6">
+                <h2 className="text-2xl font-serif text-gray-900 mb-3">
+                  {item.name}
+                </h2>
+                <div className="text-gray-700 mb-3">
+                  <span className="font-semibold">Price:</span> {item.price} Rs. / item
+                </div>
+                {item.quantity <= 5 && (
+                  <div className="text-sm font-medium text-red-600 italic mb-3">
+                    Hurry up, limited stock available!
                   </div>
-                  <div>
-                    {item.quantity <= 5 ? (
-                      <span className="text-sm font-medium text-red-600 italic">
-                        Hurry up, limited stock available!
-                      </span>
-                    ) : null}
-                  </div>
-                  <div className="text-gray-700 mt-2">
-                    <span className="font-medium">Quantity Available:</span> {item.quantity} items
-                  </div>
-                  
+                )}
+                <div className="text-gray-700">
+                  <span className="font-semibold">Quantity Available:</span> {item.quantity} items
                 </div>
               </div>
-            </Link>
-          </div>
-        ))
-      ) : (
-        <div className="text-gray-500 text-lg font-medium mt-10">
-          No food items are found.
+            </div>
+          </Link>
         </div>
-      )}
+      ))}
     </div>
+  ) : (
+    <div className="text-gray-600 text-xl font-medium mt-10">
+      No food items found.
+    </div>
+  )}
+</div>
   );
 }
 

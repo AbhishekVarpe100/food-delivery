@@ -25,71 +25,99 @@ function Orders_cust() {
   }, [success]);
 
   return (
-    <div className="overflow-x-auto p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-serif text-gray-800 mb-4 text-center">My Orders</h1>
-      <table className="min-w-full border border-gray-300 bg-white shadow-md rounded-md">
-        <thead>
-          <tr className="bg-gray-800 text-white">
-            <th className="border border-gray-300 px-6 py-3 text-left font-medium">Item Name</th>
-            <th className="border border-gray-300 px-6 py-3 text-left font-medium">Quantity</th>
-            <th className="border border-gray-300 px-6 py-3 text-left font-medium">Total Price</th>
-            <th className="border border-gray-300 px-6 py-3 text-left font-medium">Action</th>
+    <div className="overflow-x-auto p-8 bg-gray-50 min-h-screen">
+  {/* Table Title */}
+  <h1 className="text-3xl font-serif text-gray-900 mb-6 text-center">
+    My Orders
+  </h1>
+
+  {/* Table */}
+  <table className="min-w-full border border-gray-200 bg-white shadow-sm rounded-lg overflow-hidden">
+    {/* Table Header */}
+    <thead className="bg-gray-800">
+      <tr>
+        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
+          Item Name
+        </th>
+        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
+          Quantity
+        </th>
+        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
+          Total Price
+        </th>
+        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
+          Action
+        </th>
+      </tr>
+    </thead>
+
+    {/* Table Body */}
+    <tbody>
+      {data.length > 0 ? (
+        data.map((item, index) => (
+          <tr
+            key={index}
+            className={`${
+              index % 2 === 0 ? "bg-gray-50" : "bg-white"
+            } hover:bg-gray-100 transition duration-200`}
+          >
+            {/* Item Name */}
+            <td className="border border-gray-200 px-6 py-4 text-gray-800 font-medium">
+              {item.item_name}
+            </td>
+
+            {/* Quantity */}
+            <td className="border border-gray-200 px-6 py-4 text-gray-800">
+              {item.quantity}
+            </td>
+
+            {/* Total Price */}
+            <td className="border border-gray-200 px-6 py-4 text-gray-800">
+              {item.price} Rs.
+            </td>
+
+            {/* Actions */}
+            <td className="border border-gray-200 px-6 py-4">
+              <div className="flex flex-col items-center gap-3">
+                {/* Delete Button */}
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="w-full max-w-[120px] py-2 px-4 text-white bg-red-500 hover:bg-red-600 rounded-md transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  Delete
+                </button>
+
+                {/* Item Status Link */}
+                <Link
+                  to={`/main_home/orders/status/${item._id}`}
+                  className="text-blue-600 hover:text-blue-800 text-sm font-medium underline transition duration-200"
+                >
+                  Item Status
+                </Link>
+
+                {/* Delivery Status */}
+                {item.delivered && (
+                  <span className="text-green-600 font-medium text-sm">
+                    Item Delivered Successfully
+                  </span>
+                )}
+              </div>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {data.length > 0 ? (
-            data.map((item, index) => (
-              <tr
-                key={index}
-                className={`${
-                  index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                } hover:bg-gray-200 transition duration-200`}
-              >
-                <td className="border border-gray-300 px-6 py-3 text-gray-800">{item.item_name}</td>
-                <td className="border border-gray-300 px-6 py-3 text-gray-800">{item.quantity}</td>
-                <td className="border border-gray-300 px-6 py-3 text-gray-800">{item.price}</td>
-                <td className="border border-gray-300 px-6 py-4 text-center">
-  <div className="flex flex-col items-center gap-2">
-    {/* Delete Button */}
-    <button
-      onClick={() => handleDelete(item._id)}
-      className="transition duration-300 ease-in-out hover:bg-red-600 bg-red-500 font-semibold px-4 py-2 text-sm rounded-lg text-white shadow-md hover:shadow-lg"
-    >
-      Delete
-    </button>
-
-    {/* Item Status Link */}
-    <Link
-      to={`/main_home/orders/status/${item._id}`}
-      className="text-blue-600 hover:text-blue-800 text-sm font-medium underline transition duration-200"
-    >
-      Item Status
-    </Link>
-
-    {/* Delivery Status */}
-    {item.delivered ? (
-      <span className="text-green-600 font-medium text-sm">
-        Item Delivered Successfully
-      </span>
-    ) : null}
-  </div>
-</td>
-
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td
-                colSpan="4"
-                className="border border-gray-300 px-6 py-3 text-center text-gray-500 italic"
-              >
-                You have not ordered anything yet...!
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+        ))
+      ) : (
+        <tr>
+          <td
+            colSpan="4"
+            className="border border-gray-200 px-6 py-4 text-center text-gray-500 italic"
+          >
+            You have not ordered anything yet...!
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
   );
 }
 
