@@ -19,6 +19,7 @@ const nodemailer=require('nodemailer')
 const validator=require('validator')
 
 const Cart = require('../models/Cart');
+const Fav=require('../models/Fav')
 const registerValidator=[
     body('username','Minimum length 6 characters required').isLength({min:6}),
     body('email','Invalid email address').isEmail(),
@@ -675,6 +676,27 @@ router.get('/search-item',async(req,res)=>{
     }
 })
 
+router.post('/add-fav',async(req,res)=>{
+    const username=req.body.username
+    const {name,file,price}=req.body[0];
+    const newFav=new Fav({username,file,price:Number(price),name})
+    newFav.save()
+
+})
+
+
+router.get('/get-fav',async(req,res)=>{
+    const username=req.query.username
+    const data=await Fav.find({username})
+    res.json(data)
+})
+
+
+router.delete('/del-fav',async(req,res)=>{
+    const id=req.query.id
+    await Fav.findByIdAndDelete(id)
+    res.json('deleted').status(200)
+})
 
 
 

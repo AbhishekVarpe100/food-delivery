@@ -22,6 +22,7 @@ import Image from './Components/Image'
 import Status from './Components/Status'
 import Update_Status from './Components/admin/Update_Status'
 import Reviews from './Components/Reviews'
+import Fav from './Components/Fav'
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
       <Route path='/main_home/order/:id' element={<Order_panel></Order_panel>}></Route>
       <Route path='/main_home/orders/status/:id' element={<Status></Status>}></Route>
       <Route path='/main_home/reviews/:id' element={<Reviews></Reviews>}></Route>
+      <Route path='/main_home/fav' element={<Fav></Fav>}></Route>
       
 
       {/* Nested routes */}

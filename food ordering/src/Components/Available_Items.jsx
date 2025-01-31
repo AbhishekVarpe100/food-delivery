@@ -76,7 +76,7 @@ function Available_Items() {
   </div>
 
   {/* Results count */}
-  <p className="text-green-600 font-bold">Found {data.length} items</p>
+  <p className="text-green-600 font-bold">Found {data.length} {data.length==1?"item":'items'}</p>
 </form>
 
   {/* Items Grid */}

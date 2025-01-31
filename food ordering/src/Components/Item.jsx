@@ -28,6 +28,10 @@ function Item() {
     }
   };
 
+  const handleFavorite=async()=>{
+    const res=await axios.post("http://localhost:3000/add-fav",{...data,username:localStorage.getItem('username')})
+  }
+
   useEffect(() => {
     getData();
   }, [render]);
@@ -102,6 +106,8 @@ function Item() {
                   >
                     View Reviews
                   </Link>
+
+                  <button onClick={handleFavorite}>Add to favorite</button>
                 </>
               )}
             </div>
