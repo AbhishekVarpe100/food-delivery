@@ -63,7 +63,7 @@ const Home_main=()=>{
   </Link>
   <Link
     to="/main_home/fav"
-    className="text-gray-800 outline-double font-medium py-2 px-6 rounded-lg bg-green-400 hover:bg-green-300 transition duration-300 shadow-sm"
+    className="text-gray-800 font-medium py-2 px-6 rounded-lg bg-green-400 hover:bg-green-300 transition duration-300 shadow-sm"
   >
     Favorite Items
   </Link>
