@@ -50,14 +50,14 @@ const Home_main=()=>{
 <div className="flex justify-center space-x-6 bg-white/30 backdrop-blur-md p-4 rounded-lg shadow-lg border border-white/20">
   <Link
     to="/main_home"
-    className="text-gray-800 font-medium py-2 px-6 rounded-lg bg-white/40 hover:bg-white/60 transition duration-300 shadow-sm"
+    className="text-gray-800 font-medium py-2 px-6 rounded-lg bg-green-400 hover:bg-green-300 transition duration-300 shadow-sm"
   >
     Available Items
   </Link>
 
   <Link
     to="/main_home/orders"
-    className="text-gray-800 font-medium py-2 px-6 rounded-lg bg-white/40 hover:bg-white/60 transition duration-300 shadow-sm"
+    className="text-gray-800 font-medium py-2 px-6 rounded-lg bg-green-400 hover:bg-green-300 transition duration-300 shadow-sm"
   >
     Your Orders
   </Link>

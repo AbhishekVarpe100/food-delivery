@@ -663,6 +663,19 @@ router.get('/get-cart-count',async(req,res)=>{
 })
 
 
+router.get('/search-item',async(req,res)=>{
+    let text=(req.query.searchText).toLowerCase()
+    let data=await Food.find()
+    let filteredData=data.filter((item)=>item.name.toLowerCase().includes(text))
+    if(filteredData.length>0){
+        res.json(filteredData)
+    }
+    else{
+        res.json([])
+    }
+})
+
+
 
 
 

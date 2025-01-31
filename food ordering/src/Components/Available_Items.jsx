@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaSearch, FaSort } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 
 function Available_Items() {
@@ -22,6 +23,17 @@ function Available_Items() {
     }
   }
 
+  const handleSearch=async(e)=>{
+    let searchText=e.target.value
+
+    const res=await axios.get('http://localhost:3000/search-item',{params:{searchText}})
+    if(res.data){
+      setData([])
+      setData(res.data)
+    }
+
+  }
+
   useEffect(() => {
     getData();
   }, [delete_]);
@@ -29,17 +41,43 @@ function Available_Items() {
   return (
     <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
   {/* Sorting Dropdown */}
-  <form className="mb-8">
+  <form className="mb-8 space-y-4">
+  {/* Sort by dropdown */}
+  <div className="flex items-center space-x-4">
+    <label htmlFor="sort" className="text-gray-700 font-medium">
+      <FaSort className="inline-block mr-2" />
+      Sort by:
+    </label>
     <select
-      className="border-2 border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-blue-500 transition-colors duration-300"
+      id="sort"
+      className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-blue-500 transition-colors duration-300"
       onChange={handleOption}
     >
-      <option value="">---Sort by---</option>
+      <option value="">---Select---</option>
       <option value="price">Price</option>
       <option value="quantity">Quantity</option>
-      <option value="name">Item name</option>
+      <option value="name">Item Name</option>
     </select>
-  </form>
+  </div>
+
+  {/* Search input */}
+  <div className="flex items-center space-x-4">
+    <label htmlFor="search" className="text-gray-700 font-medium">
+      <FaSearch className="inline-block mr-2" />
+      Search:
+    </label>
+    <input
+      id="search"
+      type="text"
+      onChange={handleSearch}
+      className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-blue-500 transition-colors duration-300"
+      placeholder="Search item..."
+    />
+  </div>
+
+  {/* Results count */}
+  <p className="text-green-600 font-bold">Found {data.length} items</p>
+</form>
 
   {/* Items Grid */}
   {data.length > 0 ? (
