@@ -681,6 +681,7 @@ router.post('/add-fav',async(req,res)=>{
     const {name,file,price}=req.body[0];
     const newFav=new Fav({username,file,price:Number(price),name})
     newFav.save()
+    res.json('added')
 
 })
 
@@ -698,7 +699,16 @@ router.delete('/del-fav',async(req,res)=>{
     res.json('deleted').status(200)
 })
 
+router.get('/get-status',async(req,res)=>{
+    const username=req.query.username;
 
+    const fav=await Fav.find({username})
+    const data=fav.map(item=>item.name)
+    res.json(data)
 
+})
+
+const {Calc}=require('./Fn')
+router.get('/demo-route',Calc.add)
 
 module.exports=router

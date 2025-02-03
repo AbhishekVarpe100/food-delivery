@@ -30,10 +30,22 @@ function Item() {
 
   const handleFavorite=async()=>{
     const res=await axios.post("http://localhost:3000/add-fav",{...data,username:localStorage.getItem('username')})
+    if(res.data){
+      setRender(prev=>!prev)
+    }
   }
+
+  const [status,setStatus]=useState([])
+
+  async function getStatus(){
+    const res=await axios.get('http://localhost:3000/get-status',{params:{username:localStorage.getItem('username')}})
+    setStatus(res.data)
+   }
+
 
   useEffect(() => {
     getData();
+    getStatus()
   }, [render]);
 
   return (
@@ -107,7 +119,21 @@ function Item() {
                     View Reviews
                   </Link>
 
-                  <button onClick={handleFavorite}>Add to favorite</button>
+                   
+                    <div className="flex items-center space-x-2">
+                      {Array.isArray(status) && status.includes(ele.name) ? (
+                        <span className="text-green-600 font-semibold">✅ Added to Favorite</span>
+                      ) : (
+                        <button 
+                          onClick={handleFavorite} 
+                          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
+                        >
+                          Add to Favorite
+                        </button>
+                      )}
+                    </div>
+
+
                 </>
               )}
             </div>
@@ -118,6 +144,7 @@ function Item() {
   ) : (
     <p className="text-gray-500 text-lg">Loading item details...</p>
   )}
+
 </div>
   );
 }

@@ -27,6 +27,7 @@ function Fav() {
 
   return (
     <div className="container mx-auto p-4">
+      <center className='text-violet-500'><h3>Favorite Items</h3></center>
        {data.length==0?null:<> Total favorite items : {data.length}</>}
     {data.length > 0 ? (
       <div className="overflow-x-auto">
