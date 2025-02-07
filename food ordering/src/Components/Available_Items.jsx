@@ -1,126 +1,148 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { FaSearch, FaSort } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function Available_Items() {
   const [data, setData] = useState([]);
-  const [delete_, setDelete] = useState(false);
-  const [option,setOption]=useState('')
-
+  const [option, setOption] = useState("");
 
   async function getData() {
     const res = await axios.get("http://localhost:3000/get-data-cust");
     setData(res.data);
-  } 
-
-  const handleOption=async(e)=>{
-    const option=e.target.value;
-    const res= await axios.get('http://localhost:3000/order-by',{params:{option:option}})
-    if(res.data){
-      setData([])
-      setData(res.data)
-    }
   }
 
-  const handleSearch=async(e)=>{
-    let searchText=e.target.value
+  const handleOption = async (e) => {
+    const option = e.target.value;
+    const res = await axios.get("http://localhost:3000/order-by", {
+      params: { option },
+    });
+    if (res.data) setData(res.data);
+  };
 
-    const res=await axios.get('http://localhost:3000/search-item',{params:{searchText}})
-    if(res.data){
-      setData([])
-      setData(res.data)
-    }
-
-  }
+  const handleSearch = async (e) => {
+    let searchText = e.target.value;
+    const res = await axios.get("http://localhost:3000/search-item", {
+      params: { searchText },
+    });
+    if (res.data) setData(res.data);
+  };
 
   useEffect(() => {
     getData();
-  }, [delete_]);
+  }, []);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: false,
+    fade: true,
+  };
+
+  const carouselContent = [
+    {
+      img: "https://cdn.britannica.com/36/123536-050-95CB0C6E/Variety-fruits-vegetables.jpg",
+      text: "Indulge in a feast of flavors, crafted with passion and tradition.",
+    },
+    {
+      img: "https://cdn.georgeinstitute.org/sites/default/files/2020-10/world-food-day-2020.png",
+      text: "Savor the richness of gourmet delights, made just for you.",
+    },
+    {
+      img: "https://media.istockphoto.com/id/1908197459/photo/family-breakfast.jpg?s=612x612&w=0&k=20&c=Ry5HPFYwkpL2MHdSOz5Rh0AzCgOD8qjXC9Y0WL-w858=",
+      text: "A classic taste that never fades – enjoy every bite.",
+    },
+    {
+      img: "https://fitandflex.in/cdn/shop/articles/istockphoto-1127563435-612x612_1445x.jpg?v=1720790357",
+      text: "From farm to table, experience the essence of fine dining.",
+    },
+  ];
 
   return (
-    <div className="flex flex-col items-center p-8 bg-gray-50 min-h-screen">
-  {/* Sorting Dropdown */}
-  <form className="mb-8 space-y-4">
-  {/* Sort by dropdown */}
-  <div className="flex items-center space-x-4">
-    <label htmlFor="sort" className="text-gray-700 font-medium">
-      <FaSort className="inline-block mr-2" />
-      Sort by:
-    </label>
-    <select
-      id="sort"
-      className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-blue-500 transition-colors duration-300"
-      onChange={handleOption}
-    >
-      <option value="">---Select---</option>
-      <option value="price">Price</option>
-      <option value="quantity">Quantity</option>
-      <option value="name">Item Name</option>
-    </select>
-  </div>
-
-  {/* Search input */}
-  <div className="flex items-center space-x-4">
-    <label htmlFor="search" className="text-gray-700 font-medium">
-      <FaSearch className="inline-block mr-2" />
-      Search:
-    </label>
-    <input
-      id="search"
-      type="text"
-      onChange={handleSearch}
-      className="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:border-blue-500 transition-colors duration-300"
-      placeholder="Search item..."
-    />
-  </div>
-
-  {/* Results count */}
-  <p className="text-green-600 font-bold">Found {data.length} {data.length==1?"item":'items'}</p>
-</form>
-
-  {/* Items Grid */}
-  {data.length > 0 ? (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-      {data.map((item) => (
-        <div title={item.name} key={item._id}>
-          <Link to={`/main_home/${item._id}`}>
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 transform hover:-translate-y-1">
-              {/* Image */}
+    <div className="flex flex-col items-center p-8 bg-gradient-to-b from-gray-100 to-gray-200 min-h-screen font-serif">
+      {/* Carousel */}
+      <div className="relative w-full max-w-4xl mb-8 rounded-lg overflow-hidden shadow-xl border border-gray-300">
+        <Slider {...settings}>
+          {carouselContent.map((item, index) => (
+            <div key={index} className="relative">
               <img
-                loading="lazy"
-                src={`http://localhost:3000/Food_Images/${item.file}`}
-                alt={item.name}
-                className="w-full h-56 object-cover rounded-t-lg"
+                src={item.img}
+                alt={`carousel-img-${index}`}
+                className="w-full h-96 object-cover rounded-lg"
               />
-              {/* Content */}
-              <div className="p-6">
-                <h2 className="text-2xl font-serif text-gray-900 mb-3">
-                  {item.name}
-                </h2>
-                <div className="text-gray-700 mb-3">
-                  <span className="font-semibold">Price:</span> {item.price} Rs. / item
-                </div>
-                {item.quantity <= 5 && (
-                  <div className="text-sm font-medium text-red-600 italic mb-3">
-                    Hurry up, limited stock available!
-                  </div>
-                )}
-                <div className="text-gray-700">
-                  <span className="font-semibold">Quantity Available:</span> {item.quantity} items
-                </div>
+              <div className="absolute bottom-6 left-6 bg-gradient-to-r from-black via-gray-800 to-transparent p-4 rounded-lg">
+                <h1 className="text-white text-xl font-bold">{item.text}</h1>
               </div>
             </div>
-          </Link>
+          ))}
+        </Slider>
+      </div>
+
+      {/* Controls */}
+      <h2 className="text-3xl font-semibold text-gray-900 mb-4">Explore the Finest Food Items</h2>
+
+      <div className="flex flex-wrap justify-center gap-6 mb-8">
+        {/* Sorting Dropdown */}
+        <div className="flex items-center bg-white border-2 border-gray-300 px-4 py-2 rounded-lg shadow-md">
+          <FaSort className="mr-2 text-gold-500" />
+          <select className="focus:outline-none text-lg text-gray-700" onChange={handleOption}>
+            <option value="">Sort by</option>
+            <option value="price">Price</option>
+            <option value="quantity">Quantity</option>
+            <option value="name">Item Name</option>
+          </select>
         </div>
-      ))}
+
+        {/* Search Bar */}
+        <div className="flex items-center bg-white border-2 border-gray-300 px-4 py-2 rounded-lg shadow-md">
+          <FaSearch className="mr-2 text-gold-500" />
+          <input
+            type="text"
+            onChange={handleSearch}
+            placeholder="Search item..."
+            className="focus:outline-none text-lg text-gray-700"
+          />
+        </div>
+      </div>
+
+      {/* Items Grid */}
+      {data.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {data.map((item) => (
+            <div
+              key={item._id}
+              className="bg-white border-2 border-gray-300 rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300"
+            >
+              <Link to={`/main_home/${item._id}`}>
+                <img
+                  src={`http://localhost:3000/Food_Images/${item.file}`}
+                  alt={item.name}
+                  className="w-full h-48 object-cover rounded-t-lg"
+                />
+                <div className="p-6">
+                  <h2 className="text-lg font-bold text-gray-900">{item.name}</h2>
+                  <p className="text-gray-700 font-medium">Price: {item.price} Rs.</p>
+                  {item.quantity <= 5 && (
+                    <p className="text-red-600 font-bold">Limited stock available!</p>
+                  )}
+                  <p className="text-gray-600">Quantity: {item.quantity}</p>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-700 text-xl mt-6">No items available at the moment.</p>
+      )}
     </div>
-  ) : (
-    <div className="text-gray-600 text-xl font-medium mt-10">
-      No food items found.
-    </div>
-  )}
-</div>
   );
 }
 
