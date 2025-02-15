@@ -27,7 +27,7 @@ function Fav() {
 
   return (
     <div className="container mx-auto p-4">
-      <center className='text-violet-500'><h3>Favorite Items</h3></center>
+      <center className='text-violet-500 font-bold'> <i>Favorite Items</i> </center>
        {data.length==0?null:<> Total favorite items : {data.length}</>}
     {data.length > 0 ? (
       <div className="overflow-x-auto">
@@ -66,7 +66,24 @@ function Fav() {
         </table>
       </div>
     ) : (
-      <p className="text-center text-gray-500">No favorite items added</p>
+      <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg shadow-md max-w-md mx-auto">
+      <div className="flex items-center">
+        <svg
+          className="w-6 h-6 mr-2 text-yellow-600"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M3.98 18h16.04a2 2 0 001.732-3l-8.02-14a2 2 0 00-3.464 0l-8.02 14A2 2 0 003.98 18z"></path>
+        </svg>
+        <p className="font-semibold">No favorite items found</p>
+      </div>
+      <p className="mt-2 text-sm">
+        When you add favorite items, they will show here.
+      </p>
+    </div>
     )}
   </div>
   )
