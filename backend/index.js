@@ -3,6 +3,7 @@ const express =require('express');
 const app=express();
 const rateLimit=require('express-rate-limit')
 const cors=require('cors')
+require('./Connection')
 
 
 app.use(express.static("Public"))
@@ -20,8 +21,8 @@ const limiter = rateLimit({
 
 // app.use(limiter)
 
-const userRoutes=require('./routes/userRoutes')
-const adminRoutes=require('./routes/adminRoutes')
+const userRoutes=require('./routes/userRoutes1')
+const adminRoutes=require('./routes/adminRoutes1')
 // const Connection=require('./Connection')
 app.use(cors({
     origin: 'http://localhost:5173', // Allow only this origin
