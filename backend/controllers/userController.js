@@ -6,7 +6,9 @@ const Food = require('../models/Food');
 const Order = require('../models/Order');
 const Fav = require("../models/Fav");
 const Cart = require('../models/Cart');
+const Suggestion = require('../models/Suggestion');
 const secretKey='food-delivery-web-app';
+const axios=require('axios')
 exports.register=async(req,res)=>{
     const {username,email,password}=req.body;
     const error=validationResult(req);
@@ -221,5 +223,44 @@ exports.getStatus_=async(req,res)=>{
     const data=fav.map(item=>item.name)
     res.json(data)
 
+}
+
+exports.addSuggestion=async(req,res)=>{
+    try {
+        const newSuggestion=await Suggestion(req.body)
+        newSuggestion.save()
+        res.json("added")
+    } catch (error) {
+        console.log(err)
+    }
+}
+
+exports.getSuggestions=async(req,res)=>{
+    const username=req.query.username
+    try{
+        const data=await Suggestion.find({username})
+        res.json(data).status(200)
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.getSuggestionsOthers=async(req,res)=>{
+    const username=req.query.username
+    try{
+        const data=await Suggestion.find()
+        const filteredData=data.filter(item=>item.username!=username)
+        res.json(filteredData).status(200)
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.deleteSuggestion=async(req,res)=>{
+    const id=req.params.id
+    await Suggestion.findByIdAndDelete(id)
+    res.json('deleted').status(200)
 }
 

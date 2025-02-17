@@ -54,6 +54,11 @@ router.delete("/del-fav", userController.delFav);
 router.get("/get-status", userController.getStatus_);
 router.get("/gethome", verifyToken, userController.getHome);
 router.get("/get-item", userController.getItem);
+router.post("/add-suggestion", userController.addSuggestion);
+router.get("/get-suggestions", userController.getSuggestions);
+router.get("/get-suggestions-others", userController.getSuggestionsOthers);
+router.delete('/delete-suggestion/:id',userController.deleteSuggestion)
+
 
 router.post("/send-mail", async (req, res) => {
   const { email: to } = req.body;

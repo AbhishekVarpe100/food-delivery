@@ -67,6 +67,12 @@ const Home_main=()=>{
   >
     Favorite Items
   </Link>
+  <Link
+    to="/main_home/suggestions"
+    className="text-white font-bold py-2 px-6 rounded-lg bg-green-500 hover:bg-green-600 transition duration-300 shadow-sm"
+  >
+    Your suggestions
+  </Link>
 </div>
 
     <div>
