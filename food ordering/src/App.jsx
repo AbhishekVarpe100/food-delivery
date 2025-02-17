@@ -24,6 +24,7 @@ import Update_Status from './Components/admin/Update_Status'
 import Reviews from './Components/Reviews'
 import Fav from './Components/Fav'
 import Suggestions from './Components/Suggestions'
+import EditSuggestion from './Components/EditSuggestion'
 
 function App() {
 
@@ -37,8 +38,6 @@ function App() {
       <Route path='/' element={<Home></Home>}></Route>
       <Route path='/login' element={<Login></Login>}></Route>
       <Route path='/register' element={<Register></Register>}></Route>
-
-
       <Route path='/main_home' element={<Home_main></Home_main>} >
       <Route index element={<Available_Items></Available_Items>}></Route>
       <Route path='orders' element={<Orders_cust></Orders_cust>}></Route>  
@@ -47,10 +46,8 @@ function App() {
       <Route path='/main_home/orders/status/:id' element={<Status></Status>}></Route>
       <Route path='/main_home/reviews/:id' element={<Reviews></Reviews>}></Route>
       <Route path='/main_home/fav' element={<Fav></Fav>}></Route>
-      <Route path='/main_home/fav' element={<Fav></Fav>}></Route>
       <Route path='/main_home/suggestions' element={<Suggestions></Suggestions>}></Route>
-      
-
+      <Route path='/main_home/suggestions/edit/:id' element={<EditSuggestion/>}></Route>
       {/* Nested routes */}
       </Route>
 

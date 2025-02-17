@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 function Suggestions() {
@@ -26,7 +27,6 @@ function Suggestions() {
         if(res.data){
             setRender(prev=>!prev)
         }
-
     }
 
     useEffect(()=>{
@@ -60,9 +60,6 @@ function Suggestions() {
             Post
         </button>
     </form>
-
-
-    
 </div>
 
 <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
@@ -82,10 +79,11 @@ function Suggestions() {
 
             <button
               onClick={() => handleDelete(suggestion._id)}
-              className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+              className="mt-2 px-4 py-2 font-bold bg-red-600 text-white rounded hover:bg-red-700 transition"
             >
               Delete
             </button>
+            <Link to={`/main_home/suggestions/edit/${suggestion._id}`}>Edit</Link>
           </div>
         ))}
       </div>
@@ -93,7 +91,6 @@ function Suggestions() {
       <p className="text-gray-500">No suggestions found</p>
     )}
   </div>
-
   {/* Other Suggestions Section */}
   <div>
     <h2 className="text-xl font-semibold text-gray-800 mb-3">Other Suggestions</h2>
@@ -119,10 +116,7 @@ function Suggestions() {
     )}
   </div>
 </div>
-
-
 </>
-
   )
 }
 
