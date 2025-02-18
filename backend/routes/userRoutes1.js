@@ -58,6 +58,9 @@ router.post("/add-suggestion", userController.addSuggestion);
 router.get("/get-suggestions", userController.getSuggestions);
 router.get("/get-suggestions-others", userController.getSuggestionsOthers);
 router.delete('/delete-suggestion/:id',userController.deleteSuggestion)
+router.get('/get-suggestion-info/:id',userController.getSuggestionInfo)
+router.put('/edit-suggestion/:id',userController.editSuggestion)
+router.post('/like-suggestion',userController.likeSuggestion)
 
 
 router.post("/send-mail", async (req, res) => {

@@ -6,7 +6,9 @@ const cors=require('cors')
 require('./Connection')
 
 
+app.use(express.json())
 app.use(express.static("Public"))
+
 
 // Rate limiting middleware
 const limiter = rateLimit({
@@ -29,7 +31,6 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
     credentials: true // Enable cookies if needed
 }))
-app.use(express.json())
 app.use(userRoutes)
 app.use(adminRoutes)
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { GrLike } from "react-icons/gr";
 import axios from 'axios'
 
 function Suggestions() {
@@ -8,7 +9,6 @@ function Suggestions() {
     const [data,setData]=useState([])
     const [dataOther,setDataOthers]=useState([])
     const [render,setRender]=useState(false)
-
 
     const handleSubmit=async(e)=>{
         e.preventDefault()
@@ -20,13 +20,21 @@ function Suggestions() {
             }
         })
     }
-
+  
     const handleDelete=async(id)=>{
-
         const res=await axios.delete(`http://localhost:3000/delete-suggestion/${id}`)
         if(res.data){
             setRender(prev=>!prev)
         }
+    }
+
+    const handleLike=async(id)=>{
+      const res=await axios.post('http://localhost:3000/like-suggestion',{id,username:localStorage.getItem('username')})
+
+      if(res.data){
+        setRender(prev=>!prev)
+      }
+
     }
 
     useEffect(()=>{
@@ -74,16 +82,26 @@ function Suggestions() {
             className="p-4 border rounded-lg shadow-sm bg-gray-50 w-full overflow-hidden break-words"
           >
             <p className="text-gray-700">{suggestion.suggestion}</p>
-
+            <div>Reply : {suggestion.reply?suggestion.reply:<>-</>}</div>
+            <hr />
             <div>Posted At : {suggestion.createdAt}</div>
 
             <button
-              onClick={() => handleDelete(suggestion._id)}
-              className="mt-2 px-4 py-2 font-bold bg-red-600 text-white rounded hover:bg-red-700 transition"
-            >
-              Delete
-            </button>
-            <Link to={`/main_home/suggestions/edit/${suggestion._id}`}>Edit</Link>
+  onClick={() => handleDelete(suggestion._id)}
+  className="mt-1 px-2 py-1 text-xs font-bold m-4 bg-red-600 text-white rounded hover:bg-red-700 transition"
+>
+  Delete
+</button> 
+<Link
+  className="mt-1 px-2 py-1 text-xs font-bold m-4 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+  to={`/main_home/suggestions/edit/${suggestion._id}`}
+>
+  Edit
+</Link>
+
+<button onClick={()=>handleLike(suggestion._id)}><GrLike></GrLike></button>
+<div>Likes : {suggestion.likes}</div>
+
           </div>
         ))}
       </div>
@@ -106,8 +124,13 @@ function Suggestions() {
             </p>
             <p className="text-gray-600 mt-1">
               <span>Description :</span> {suggestion.suggestion}
-              <div>Posted At : {suggestion.createdAt}</div>
+              <div>Reply : {suggestion.reply?suggestion.reply:<>-</>}</div>
+              <hr />
+
+            <div>Posted At : {suggestion.createdAt}</div>
             </p>
+            <button onClick={()=>handleLike(suggestion._id)}><GrLike></GrLike></button>
+            <div>Likes : {suggestion.likes}</div>
           </div>
         ))}
       </div>

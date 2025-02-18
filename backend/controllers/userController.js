@@ -8,7 +8,8 @@ const Fav = require("../models/Fav");
 const Cart = require('../models/Cart');
 const Suggestion = require('../models/Suggestion');
 const secretKey='food-delivery-web-app';
-const axios=require('axios')
+const axios=require('axios');
+const Likes = require('../models/Likes');
 exports.register=async(req,res)=>{
     const {username,email,password}=req.body;
     const error=validationResult(req);
@@ -261,6 +262,41 @@ exports.getSuggestionsOthers=async(req,res)=>{
 exports.deleteSuggestion=async(req,res)=>{
     const id=req.params.id
     await Suggestion.findByIdAndDelete(id)
+    await Likes.deleteMany({suggestion_id:id})
     res.json('deleted').status(200)
+}
+
+exports.getSuggestionInfo=async(req,res)=>{
+    const id=req.params.id
+    const data=await Suggestion.find({_id:id})
+    res.json(data)  
+}
+
+exports.editSuggestion=async(req,res)=>{
+    const id=req.params.id
+    const suggestion=req.body.suggestion
+    await Suggestion.findByIdAndUpdate({_id:id},{$set:{suggestion}})
+    res.json('edited')
+}
+
+exports.likeSuggestion=async(req,res)=>{
+    const {id,username}=req.body
+    let isLiked=await Likes.find({suggestion_id:id,username})
+    if(isLiked.length==1){
+        await Likes.deleteOne({username,suggestion_id:id})
+        const suggestion=await Suggestion.find({_id:id})
+        const likes_=suggestion[0].likes
+        await Suggestion.findByIdAndUpdate({_id:id},{$set:{likes:likes_-1}},{new:true})
+        res.json("disliked")
+    }
+    else{
+        let newLike=new Likes({username,suggestion_id:id})
+        newLike.save()
+        const suggestion=await Suggestion.find({_id:id})
+        const likes_=suggestion[0].likes
+        await Suggestion.findByIdAndUpdate({_id:id},{$set:{likes:likes_+1}},{new:true})
+        res.json("liked")
+    }
+    
 }
 

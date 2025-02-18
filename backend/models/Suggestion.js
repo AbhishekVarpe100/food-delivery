@@ -8,7 +8,12 @@ const suggestionSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    reply:String
+    reply:String,
+
+    likes:{
+        type:Number,
+        default:0
+    }
 },{timestamps:true})
 
 module.exports=mongoose.model("Suggestion",suggestionSchema)
