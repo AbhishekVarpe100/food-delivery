@@ -31,5 +31,7 @@ router.get("/get-orders-data", adminControllers.getOrdersData);
 router.put("/update-status/:id", adminControllers.updateStatus);
 router.get("/get-admin-cart", adminControllers.adminCart);
 router.get("/get-data-by-username", adminControllers.getDataByUserName);
+router.get("/get-all-suggestions", adminControllers.getAllSuggestions);
+router.post("/post-reply", adminControllers.postReply);
 
 module.exports = router;

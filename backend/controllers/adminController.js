@@ -2,6 +2,7 @@ const Cart = require("../models/Cart");
 const Food = require("../models/Food");
 const Order = require("../models/Order");
 const fs = require("fs");
+const Suggestion = require("../models/Suggestion");
 exports.addItem = async (req, res) => {
   const file = req.file.filename;
   const { food, price, quantity } = req.body;
@@ -96,3 +97,14 @@ exports.getDataByUserName = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.getAllSuggestions=async(req,res)=>{
+  let data=await Suggestion.find()
+  res.json(data).status(200)
+}
+
+exports.postReply=async(req,res)=>{
+  const {reply,id}=req.body
+  await Suggestion.findByIdAndUpdate({_id:id},{$set:{reply}})
+  res.json('replied')
+}
