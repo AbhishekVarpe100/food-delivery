@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Select, MenuItem } from "@mui/material";
+import { Typography } from "@mui/material";
 
 function Available_Items() {
   const [data, setData] = useState([]);
@@ -87,18 +89,25 @@ function Available_Items() {
       </div>
 
       {/* Controls */}
-      <h2 className="text-3xl font-semibold text-gray-900 mb-4">Explore the Finest Food Items</h2>
+      <h2 className="text-3xl font-semibold text-gray-900 mb-4">
+        Explore the Finest Food Items
+      </h2>
 
       <div className="flex flex-wrap justify-center gap-6 mb-8">
         {/* Sorting Dropdown */}
         <div className="flex items-center bg-white border-2 border-gray-300 px-4 py-2 rounded-lg shadow-md">
           <FaSort className="mr-2 text-gold-500" />
-          <select className="focus:outline-none text-lg text-gray-700" onChange={handleOption}>
-            <option value="">Sort by</option>
-            <option value="price">Price</option>
-            <option value="quantity">Quantity</option>
-            <option value="name">Item Name</option>
-          </select>
+          <Select
+            value={option}
+            onChange={handleOption}
+            displayEmpty
+            className="focus:outline-none text-lg text-gray-700"
+          >
+            <MenuItem value="">Sort by</MenuItem>
+            <MenuItem value="price">Price</MenuItem>
+            <MenuItem value="quantity">Quantity</MenuItem>
+            <MenuItem value="name">Item Name</MenuItem>
+          </Select>
         </div>
 
         {/* Search Bar */}
@@ -128,10 +137,16 @@ function Available_Items() {
                   className="w-full h-48 object-cover rounded-t-lg"
                 />
                 <div className="p-6">
-                  <h2 className="text-lg font-bold text-gray-900">{item.name}</h2>
-                  <p className="text-gray-700 font-medium">Price: {item.price} Rs.</p>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    {item.name}
+                  </h2>
+                  <p className="text-gray-700 font-medium">
+                    Price: {item.price} Rs.
+                  </p>
                   {item.quantity <= 5 && (
-                    <p className="text-red-600 font-bold">Limited stock available!</p>
+                    <p className="text-red-600 font-bold">
+                      Limited stock available!
+                    </p>
                   )}
                   <p className="text-gray-600">Quantity: {item.quantity}</p>
                 </div>
@@ -140,7 +155,9 @@ function Available_Items() {
           ))}
         </div>
       ) : (
-        <p className="text-gray-700 text-xl mt-6">No items available at the moment.</p>
+        <Typography variant="h6" className="text-gray-700 mt-6">
+          No items available at the moment.
+        </Typography>
       )}
     </div>
   );

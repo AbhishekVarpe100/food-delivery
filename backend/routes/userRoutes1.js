@@ -61,6 +61,7 @@ router.delete('/delete-suggestion/:id',userController.deleteSuggestion)
 router.get('/get-suggestion-info/:id',userController.getSuggestionInfo)
 router.put('/edit-suggestion/:id',userController.editSuggestion)
 router.post('/like-suggestion',userController.likeSuggestion)
+router.get('/get-all-likes',userController.getAllLikes)
 
 
 router.post("/send-mail", async (req, res) => {

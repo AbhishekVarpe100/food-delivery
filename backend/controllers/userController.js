@@ -300,3 +300,15 @@ exports.likeSuggestion=async(req,res)=>{
     
 }
 
+exports.getAllLikes=async function(req,res){
+    try{
+        const username=req.query.username
+        const data=await Likes.find({username})
+        const newData=data.map(like=>`${like.username}${like.suggestion_id}`)
+        res.json(newData)
+    }
+    catch{
+
+    }
+}
+
