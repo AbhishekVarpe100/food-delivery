@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GrLike } from "react-icons/gr";
 import axios from 'axios';
-import { Container, Typography, TextField, Button, Paper, Box, IconButton, List, ListItem, ListItemText, Divider, Chip } from '@mui/material';
+import { Container, Typography, TextField, Button, Paper, Box, IconButton, List, ListItem, ListItemText, Divider, Chip, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -92,23 +92,32 @@ function Suggestions() {
                                     <Typography variant="body2" color="textSecondary">Posted At: {suggestion.createdAt}</Typography>
                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1 }}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            <IconButton onClick={() => handleDelete(suggestion._id)} color="error" size="small">
-                                                <DeleteIcon />
-                                            </IconButton>
-                                            <Link to={`/main_home/suggestions/edit/${suggestion._id}`}>
-                                                <IconButton color="primary" size="small">
-                                                    <EditIcon />
+                                            <Tooltip title="Delete" arrow placement="top">
+                                                <IconButton onClick={() => handleDelete(suggestion._id)} color="error" size="small">
+                                                    <DeleteIcon />
                                                 </IconButton>
+                                            </Tooltip>
+                                            <Link to={`/main_home/suggestions/edit/${suggestion._id}`}>
+                                                <Tooltip title="Edit" arrow placement="top">
+                                                    <IconButton color="primary" size="small">
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </Link>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            <IconButton
-                                                title={likes.includes(`${suggestion.username}${suggestion._id}`) ? 'Dislike' : 'Like'}
-                                                onClick={() => handleLike(suggestion._id)}
-                                                size="small"
+                                            <Tooltip
+                                                title={likes.includes(`${suggestion.username}${suggestion._id}`) ? 'Dislike' : 'Like'} 
+                                                arrow 
+                                                placement="top"
                                             >
-                                                <GrLike className={likes.includes(`${suggestion.username}${suggestion._id}`) ? "text-red-500" : "text-black"} />
-                                            </IconButton>
+                                                <IconButton
+                                                    onClick={() => handleLike(suggestion._id)}
+                                                    size="small"
+                                                >
+                                                    <GrLike className={likes.includes(`${suggestion.username}${suggestion._id}`) ? "text-red-500" : "text-black"} />
+                                                </IconButton>
+                                            </Tooltip>
                                             <Chip label={`Likes: ${suggestion.likes}`} size="small" />
                                         </Box>
                                     </Box>
@@ -133,13 +142,18 @@ function Suggestions() {
                                     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Suggested by: {suggestion.username}</Typography>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            <IconButton
-                                                title={likes.includes(`${suggestion.username}${suggestion._id}`) ? 'Dislike' : 'Like'}
-                                                onClick={() => handleLike(suggestion._id)}
-                                                size="small"
+                                            <Tooltip 
+                                                title={likes.includes(`${suggestion.username}${suggestion._id}`) ? 'Dislike' : 'Like'} 
+                                                arrow 
+                                                placement="top"
                                             >
-                                                <GrLike className={likes.includes(`${suggestion.username}${suggestion._id}`) ? "text-red-500" : "text-black"} />
-                                            </IconButton>
+                                                <IconButton
+                                                    onClick={() => handleLike(suggestion._id)}
+                                                    size="small"
+                                                >
+                                                    <GrLike className={likes.includes(`${suggestion.username}${suggestion._id}`) ? "text-red-500" : "text-black"} />
+                                                </IconButton>
+                                            </Tooltip>
                                             <Chip label={`Likes: ${suggestion.likes}`} size="small" />
                                         </Box>
                                     </Box>

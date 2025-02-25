@@ -1,110 +1,118 @@
-import React, { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, Outlet } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Box,
+  useMediaQuery,
+  Button,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 function Admin() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 900px)");
 
-  // Toggle the menu state for mobile
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleDrawer = () => setIsDrawerOpen(!isDrawerOpen);
+
+  const menuItems = [
+    { label: "Available Items", path: "/admin" },
+    { label: "Add Item", path: "/admin/add_item" },
+    { label: "Orders", path: "/admin/orders" },
+    { label: "Cart", path: "/admin/cart", color: "#2ECC71" },
+    { label: "Customer Suggestions", path: "/admin/suggestions", color: "#2ECC71" },
+  ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      {/* Header Section with Hamburger Icon */}
-      <header className="flex justify-between items-center p-6 bg-white shadow-md md:hidden">
-        <h1 className="text-2xl font-semibold text-gray-800">Admin Dashboard</h1>
-        <button className="text-2xl" onClick={toggleMenu}>
-          ☰
-        </button>
-      </header>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh", bgcolor: "#F9FAFB" }}>
+      {/* App Bar for Mobile */}
+      {isMobile && (
+        <AppBar position="sticky" sx={{ bgcolor: "white", boxShadow: 3 }}>
+          <Toolbar>
+            <Typography variant="h6" sx={{ flexGrow: 1, color: "#2C3E50", fontWeight: "bold" }}>
+              Admin Dashboard
+            </Typography>
+            <IconButton edge="end" onClick={toggleDrawer}>
+              <MenuIcon sx={{ color: "#2C3E50" }} />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      )}
 
-      {/* Sidebar for Mobile and Medium Screens */}
-      <div
-        className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-50 transition-all duration-300 ease-in-out ${isMenuOpen ? 'block' : 'hidden'}`}
-        onClick={() => setIsMenuOpen(false)} // Close the menu when clicking outside
-      >
-        <div
-          className={`bg-gray-700 w-64 h-full p-6 space-y-4 transition-transform duration-500 ease-in-out transform ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-        >
-          <button
-            className="absolute top-4 right-4 text-2xl text-white"
-            onClick={() => setIsMenuOpen(false)} // Close the menu when clicking close button
-          >
-            ×
-          </button>
-          <Link
-            to="/admin"
-            className="block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-          >
-            Available Items
-          </Link>
-          <Link
-            to="/admin/add_item"
-            className="block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-          >
-            Add Item
-          </Link>
-          <Link
-            to="/admin/orders"
-            className="block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-          >
-            Orders
-          </Link>
-          <Link
-            to="/admin/cart"
-            className="block px-4 py-2 transition duration-300 font-bold bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            Cart
-          </Link>
-          <Link
-            to="/admin/suggestions"
-            className="block px-4 py-2 transition duration-300 font-bold bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            Customer Suggestions
-          </Link>
-        </div>
-      </div>
+      {/* Sidebar Drawer for Mobile */}
+      <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer}>
+        <Box sx={{ width: 260, bgcolor: "#2C3E50", color: "white", height: "100vh" }}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+            <IconButton onClick={toggleDrawer} sx={{ color: "white" }}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <List>
+            {menuItems.map((item) => (
+              <ListItem key={item.label} disablePadding>
+                <ListItemButton component={Link} to={item.path} onClick={toggleDrawer}>
+                  <ListItemText primary={item.label} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
 
-      {/* Desktop Menu (Visible only on medium and large screens) */}
-      <nav className="hidden md:flex justify-center m-6 space-x-6 mb-6 w-full">
-        <Link
-          to="/admin"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+      {/* Desktop Navigation */}
+      {!isMobile && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 2,
+            p: 2,
+            bgcolor: "white",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            borderRadius: "10px",
+            mx: "auto",
+            width: "80%",
+          }}
         >
-          Available Items
-        </Link>
-        <Link
-          to="/admin/add_item"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          Add Item
-        </Link>
-        <Link
-          to="/admin/orders"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          Orders
-        </Link>
-        <Link
-          to="/admin/cart"
-          className="px-4 py-2 transition duration-300 font-bold bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          Cart
-        </Link>
-        <Link
-          to="/admin/suggestions"
-          className="px-4 py-2 transition duration-300 font-bold bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          Customer Suggestions
-        </Link>
-      </nav>
+          {menuItems.map((item) => (
+            <Button
+              key={item.label}
+              component={Link}
+              to={item.path}
+              sx={{
+                px: 3,
+                py: 1.5,
+                borderRadius: "8px",
+                backgroundColor: item.color || "#1F78D1",
+                color: "white",
+                fontWeight: "bold",
+                transition: "0.3s",
+                "&:hover": {
+                  backgroundColor: item.color ? "#27AE60" : "#0E5CA8",
+                  transform: "scale(1.05)",
+                  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
+                },
+              }}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </Box>
+      )}
 
       {/* Main Content */}
-      <div className="w-full p-6">
+      <Box sx={{ flexGrow: 1, p: 3 }}>
         <Outlet />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 

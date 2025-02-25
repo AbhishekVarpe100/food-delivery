@@ -1,12 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Box,
+  Button,
+  Badge,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Divider
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 function NavBar() {
   const [username, setUser] = useState(localStorage.getItem("username"));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const [cartCountTotal, setCount] = useState(0);
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
     localStorage.removeItem("username");
@@ -38,158 +57,131 @@ function NavBar() {
     getCartCount();
   }, []);
 
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setIsMenuOpen(open);
+  };
+
   return (
-    <nav className="bg-gradient-to-r from-gray-800 to-gray-900 p-4 shadow-xl">
-      <div className="container mx-auto flex justify-between items-center">
-        {/* Logo */}
-        <a
-          href="#"
-          className="text-white font-extrabold text-2xl tracking-wide"
-        >
-          FoodOrdering<span className="text-green-400">Platform</span>.com
-        </a>
+    <>
+      <AppBar position="static" sx={{ bgcolor: 'gray', boxShadow: 3 }}>
+        <Toolbar>
+          {/* Logo */}
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+            FoodOrdering<span style={{ color: '#66bb6a' }}>Platform</span>.com
+          </Typography>
 
-        {/* Hamburger Menu for Mobile */}
-        <button
-          className="text-gray-300 md:hidden focus:outline-none z-50"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <FaTimes className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
-        </button>
-
-        {/* Overlay (Blurred Background) */}
-        {isMenuOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-lg transition-opacity duration-300 z-40"
-            onClick={() => setIsMenuOpen(false)}
-          ></div>
-        )}
-
-        {/* Mobile Menu (Ensuring Solid Background) */}
-        <div
-          className={`fixed top-0 right-0 h-full w-3/4 bg-gray-900 shadow-lg transform ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-300 ease-in-out p-6 md:hidden z-50`}
-        >
-          {/* Close Button */}
-          <button
-            className="absolute top-4 right-4 text-gray-300"
-            onClick={() => setIsMenuOpen(false)}
+          {/* Hamburger Menu for Mobile */}
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+            sx={{ display: { md: 'none' } }}
           >
-            <FaTimes className="w-6 h-6" />
-          </button>
+            <MenuIcon />
+          </IconButton>
 
-          {/* Links */}
-          <div className="flex flex-col space-y-6 mt-12">
-            <Link
-              to="/"
-              className="text-gray-300 hover:text-green-400 font-medium transition duration-300"
-              onClick={() => setIsMenuOpen(false)}
-            >
+          {/* Desktop Menu */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+            <Button color="inherit" component={Link} to="/" sx={{ mr: 2 }}>
               Home
-            </Link>
+            </Button>
 
             {username ? (
               <>
-                <Link
-                  onClick={handleLogOut}
-                  className="text-gray-300 hover:text-green-400 font-medium transition duration-300 cursor-pointer"
-                >
+                <Button color="inherit" onClick={handleLogOut} startIcon={<ExitToAppIcon />} sx={{ mr: 2 }}>
                   Log out
-                </Link>
-
-                <Link to="/cart" className="relative">
-                  <FaShoppingCart
-                    title={`Cart : ${cartCountTotal} Items`}
-                    className="text-gray-300 w-6 h-6 hover:text-green-400 transition duration-300"
-                  />
-                  <div className="absolute -top-2 -right-2 bg-green-400 text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                    {cartCountTotal}
+                </Button>
+                <IconButton color="inherit" component={Link} to="/cart" sx={{ mr: 2 }}>
+                  <Badge badgeContent={cartCountTotal} color="secondary">
+                    <ShoppingCartIcon />
+                  </Badge>
+                </IconButton>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <AccountCircleIcon sx={{ mr: 1 }} />
+                  <div>
+                    <Typography variant="body1">{username}</Typography>
+                    <Typography variant="body2">
+                      {localStorage.getItem("email")}
+                    </Typography>
                   </div>
-                </Link>
-
-                <div className="text-gray-300 font-medium">
-                  <span>{username}</span>
-                  <span className="block text-sm text-gray-400">
-                    {localStorage.getItem("email")}
-                  </span>
-                </div>
+                </Box>
               </>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  className="text-gray-300 hover:text-green-400 font-medium transition duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
+                <Button color="inherit" component={Link} to="/login" sx={{ mr: 2 }}>
                   Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="text-gray-300 hover:text-green-400 font-medium transition duration-300"
-                  onClick={() => setIsMenuOpen(false)}
-                >
+                </Button>
+                <Button color="inherit" component={Link} to="/register">
                   Register
-                </Link>
+                </Button>
               </>
             )}
-          </div>
-        </div>
+          </Box>
+        </Toolbar>
+      </AppBar>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex md:items-center md:space-x-8">
-          <Link
-            to="/"
-            className="text-gray-300 hover:text-green-400 font-medium transition duration-300"
-          >
-            Home
-          </Link>
-
-          {username ? (
-            <div className="md:flex md:items-center md:space-x-6">
-              <Link
-                onClick={handleLogOut}
-                className="text-gray-300 hover:text-green-400 font-medium transition duration-300 cursor-pointer"
-              >
-                Log out
-              </Link>
-
-              <Link to="/cart" className="relative">
-                <FaShoppingCart
-                  title={`Cart : ${cartCountTotal} Items`}
-                  className="text-gray-300 w-6 h-6 hover:text-green-400 transition duration-300"
-                />
-                <div className="absolute -top-2 -right-2 bg-green-400 text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                  {cartCountTotal}
-                </div>
-              </Link>
-
-              <div className="text-gray-300 font-medium">
-                <span>{username}</span>
-                <span className="block text-sm text-gray-400">
-                  {localStorage.getItem("email")}
-                </span>
-              </div>
-            </div>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="text-gray-300 hover:text-green-400 font-medium transition duration-300"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="text-gray-300 hover:text-green-400 font-medium transition duration-300"
-              >
-                Register
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
-    </nav>
+      {/* Mobile Menu Drawer */}
+      <Drawer
+        anchor="right"
+        open={isMenuOpen}
+        onClose={toggleDrawer(false)}
+        PaperProps={{
+          sx: { width: '50%' } // Set width to 50% of the viewport
+        }}
+      >
+        <Box sx={{ width: '100%', padding: 2 }} role="presentation">
+          <List>
+            <ListItem button component={Link} to="/" onClick={toggleDrawer(false)}>
+              <ListItemText primary="Home" />
+            </ListItem>
+            {username ? (
+              <>
+                <ListItem button onClick={handleLogOut}>
+                  <ListItemIcon>
+                    <ExitToAppIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Log out" />
+                </ListItem>
+                <ListItem button component={Link} to="/cart" onClick={toggleDrawer(false)}>
+                  <ListItemIcon>
+                    <ShoppingCartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={`Cart (${cartCountTotal} ${cartCountTotal==1?'Item':'Items'})`} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemIcon>
+                    <AccountCircleIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={username}
+                    secondary={localStorage.getItem("email")}
+                    primaryTypographyProps={{ fontWeight: 'bold' }}
+                    secondaryTypographyProps={{ color: 'textSecondary' }}
+                  />
+                </ListItem>
+              </>
+            ) : (
+              <>
+                <ListItem button component={Link} to="/login" onClick={toggleDrawer(false)}>
+                  <ListItemText primary="Login" />
+                </ListItem>
+                <ListItem button component={Link} to="/register" onClick={toggleDrawer(false)}>
+                  <ListItemText primary="Register" />
+                </ListItem>
+              </>
+            )}
+          </List>
+          <IconButton onClick={toggleDrawer(false)} sx={{ position: 'absolute', top: 8, right: 8 }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </Drawer>
+    </>
   );
 }
 
