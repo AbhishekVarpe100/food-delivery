@@ -95,17 +95,17 @@ function NavBar() {
                 <Button color="inherit" onClick={handleLogOut} startIcon={<ExitToAppIcon />} sx={{ mr: 2 }}>
                   Log out
                 </Button>
-                <IconButton color="inherit" component={Link} to="/cart" sx={{ mr: 2 }}>
+                {localStorage.getItem('username')=='undefined'?null:<IconButton color="inherit" component={Link} to="/cart" sx={{ mr: 2 }}>
                   <Badge badgeContent={cartCountTotal} color="secondary">
                     <ShoppingCartIcon />
                   </Badge>
-                </IconButton>
+                </IconButton>}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <AccountCircleIcon sx={{ mr: 1 }} />
                   <div>
-                    <Typography variant="body1">{username}</Typography>
+                    <Typography variant="body1">{username=='undefined'?null:username}</Typography>
                     <Typography variant="body2">
-                      {localStorage.getItem("email")}
+                      {localStorage.getItem("email")=='undefined'?null:localStorage.getItem("email")}
                     </Typography>
                   </div>
                 </Box>

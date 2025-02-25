@@ -1,96 +1,68 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-function Add_item() {
+import { TextField, Button, Container, Typography, Box, Paper, Alert } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
-  const [data,setData]=useState({
-    name:'',
-    price:'',
-    quantity:'',
-  })
-  const [file,setFile]=useState('')
-  const [success,setSuccess]=useState('');
-  const navigate=useNavigate();
-  const handleChange=(e)=>{
-    const {name,value}=e.target;
-    setData({...data,[name]:value})
-  }
+function AddItem() {
+  const [data, setData] = useState({ name: '', price: '', quantity: '' });
+  const [file, setFile] = useState(null);
+  const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit=async(e)=>{
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('food', data.name);
+    formData.append('price', data.price);
+    formData.append('quantity', data.quantity);
+    formData.append('file', file);
 
-    // console.log(file,food)
-
-    const formData=new FormData();
-
-    formData.append('food',data.name);
-    formData.append('price',data.price)
-    formData.append('quantity',data.quantity)
-    formData.append('file',file)
-
-    const res=await axios.post('http://localhost:3000/add-item',formData)
-    if(res.data.msg=='added'){
-      setSuccess("Added")
-      setTimeout(()=>{setSuccess('')
-      navigate('/admin')
-    },3000)
+    try {
+      const res = await axios.post('http://localhost:3000/add-item', formData);
+      if (res.data.msg === 'added') {
+        setSuccess('Added successfully');
+        setTimeout(() => {
+          setSuccess('');
+          navigate('/admin');
+        }, 3000);
+      }
+    } catch (error) {
+      console.error('Error adding item:', error);
     }
-  }
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-  <form
-    onSubmit={handleSubmit}
-    className="w-full max-w-lg bg-white p-6 rounded-lg shadow-sm space-y-5"
-  >
-    {success && (
-      <div className="text-center text-lg text-green-500 font-medium">{success}</div>
-    )}
+    <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ padding: 4, mt: 5 }}>
+        <Typography variant="h5" textAlign="center" gutterBottom>
+          Add Food Item
+        </Typography>
 
-    <h2 className="text-xl font-semibold text-gray-700 text-center">Add Food Item</h2>
+        {success && <Alert severity="success">{success}</Alert>}
 
-    <div className="flex flex-col space-y-4">
-      <input
-        name="name"
-        required
-        onChange={handleChange}
-        type="text"
-        placeholder="Food name"
-        className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
-      />
-      <input
-        type="text"
-        name="price"
-        required
-        onChange={handleChange}
-        placeholder="Food price"
-        className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
-      />
-      <input
-        type="text"
-        name="quantity"
-        required
-        onChange={handleChange}
-        placeholder="Quantity available"
-        className="w-full px-4 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-gray-300"
-      />
-      <input
-        required
-        onChange={(e) => setFile(e.target.files[0])}
-        type="file"
-        className="w-full px-2 py-2 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-gray-300 file:bg-gray-100 file:py-1 file:px-3 file:border-0 file:text-gray-600 file:text-sm file:font-normal"
-      />
-    </div>
+        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField label="Food Name" name="name" required onChange={handleChange} fullWidth />
+          <TextField label="Price" name="price" required onChange={handleChange} fullWidth />
+          <TextField label="Quantity" name="quantity" required onChange={handleChange} fullWidth />
 
-    <button
-      type="submit"
-      className="w-full bg-gray-700 text-white py-2 rounded focus:outline-none hover:bg-gray-800 transition duration-150"
-    >
-      Add Item
-    </button>
-  </form>
-</div>
+          <Button variant="contained" component="label" startIcon={<CloudUploadIcon />}>
+            Upload Image
+            <input required type="file" hidden onChange={(e) => setFile(e.target.files[0])} />
+          </Button>
 
-  )
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Add Item
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
+  );
 }
 
-export default Add_item;
+export default AddItem;
