@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Paper,
+  Button,
+  Typography,
+  CircularProgress,
+} from '@mui/material';
 
 function Orders() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getData = async () => {
-    const res = await axios.get('http://localhost:3000/get-orders-data');
-    setData(res.data);
+    try {
+      const res = await axios.get('http://localhost:3000/get-orders-data');
+      setData(res.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -15,44 +34,65 @@ function Orders() {
   }, []);
 
   return (
-    <div className="overflow-x-auto p-4">
-      <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-        <thead>
-          <tr className="bg-gray-100 text-left">
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Order ID</th>
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Customer Name</th>
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Mobile Number</th>
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Address</th>
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Item Name</th>
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Quantity</th>
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Total Price</th>
-            <th className="px-4 py-2 border-b font-medium text-sm text-gray-700">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length > 0 ? (
-            data.map((ele) => (
-              <tr key={ele._id} className="hover:bg-gray-50">
-                <td className="px-4 py-2 border-b text-sm text-gray-800">{ele._id}</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.cust_name}</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.mobile}</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.addr}</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.item_name}</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.quantity}</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800">{ele.price} Rs.</td>
-                <td className="px-4 py-2 border-b text-sm text-gray-800"><Link to={`/admin/orders/update-status/${ele._id}`} className='bg-green-500 p-2 text-white font-bold hover:bg-green-600 transition duration-500'>Update Status</Link></td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7" className="px-4 py-2 border-b text-center text-sm text-gray-500">
-                No orders yet
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+    <TableContainer component={Paper} sx={{ mt: 4, p: 2 }}>
+      <Typography variant="h6" component="div" sx={{ mb: 2, fontWeight: 'bold' }}>
+        Orders List
+      </Typography>
+
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <Table>
+          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold' }}>Order ID</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Mobile Number</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Address</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Item Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Quantity</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Total Price</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Action</TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {data.length > 0 ? (
+              data.map((ele) => (
+                <TableRow key={ele._id} hover>
+                  <TableCell>{ele._id}</TableCell>
+                  <TableCell>{ele.cust_name}</TableCell>
+                  <TableCell>{ele.mobile}</TableCell>
+                  <TableCell>{ele.addr}</TableCell>
+                  <TableCell>{ele.item_name}</TableCell>
+                  <TableCell>{ele.quantity}</TableCell>
+                  <TableCell>{ele.price} Rs.</TableCell>
+                  <TableCell>
+                    <Button
+                      component={Link}
+                      to={`/admin/orders/update-status/${ele._id}`}
+                      variant="contained"
+                      color="success"
+                      size="small"
+                    >
+                      Update Status
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={8} align="center">
+                  No orders yet
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+    </TableContainer>
   );
 }
 
