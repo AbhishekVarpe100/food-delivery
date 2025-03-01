@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import './CSS/Animation.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';  
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Alert } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion'; // Import Framer Motion
@@ -21,7 +20,7 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     try {
       const res = await axios.post('http://localhost:3000/login', user);
       localStorage.setItem('token', `bearer ${res.data.token}`);
@@ -57,22 +56,46 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-200 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 z-0 bg-gray-100 flex justify-center items-center">
-        <div className="ball bg-red-500"></div>
-        <div className="ball bg-blue-500"></div>
-        <div className="ball bg-green-500"></div>
-        <div className="ball bg-yellow-500"></div>
-        <div className="ball bg-purple-500"></div>
-      </div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        backgroundImage: 'url(https://cdn.georgeinstitute.org/sites/default/files/2020-10/world-food-day-2020.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        position: 'relative',
+      }}
+    >
+      {/* Background Overlay */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay for better text contrast
+          zIndex: 0,
+        }}
+      ></div>
 
       {/* Login Form */}
-      <form 
-        onSubmit={handleSubmit} 
-        className="relative z-10 w-full max-w-sm p-8 bg-white rounded-lg shadow-xl space-y-6"
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          maxWidth: '400px',
+          padding: '2rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderRadius: '0.5rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.5rem',
+        }}
       >
-        <h2 className="text-2xl font-semibold text-center">Login</h2>
+        <h2 style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>Login</h2>
 
         {/* Success Alert with Smooth Animation */}
         <AnimatePresence>
@@ -88,30 +111,30 @@ function Login() {
           )}
         </AnimatePresence>
 
-        <TextField 
-          required 
-          name="username" 
-          onChange={handleChange} 
-          label="Username" 
+        <TextField
+          required
+          name="username"
+          onChange={handleChange}
+          label="Username"
           variant="standard"
           fullWidth
         />
 
-        <TextField 
-          type="password" 
-          required 
-          name="password" 
-          onChange={handleChange} 
-          label="Password" 
+        <TextField
+          type="password"
+          required
+          name="password"
+          onChange={handleChange}
+          label="Password"
           variant="standard"
           fullWidth
         />
 
-        <Button 
-          variant="contained" 
-          fullWidth 
-          type="submit" 
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md"
+        <Button
+          variant="contained"
+          fullWidth
+          type="submit"
+          style={{ backgroundColor: '#3b82f6', hover: { backgroundColor: '#2563eb' } }}
         >
           Login
         </Button>

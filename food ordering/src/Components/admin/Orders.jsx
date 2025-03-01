@@ -74,7 +74,7 @@ function Orders() {
                       component={Link}
                       to={`/admin/orders/update-status/${ele._id}`}
                       variant="contained"
-                      color="success"
+                      color="warning"
                       size="small"
                     >
                       Update Status
@@ -85,7 +85,7 @@ function Orders() {
             ) : (
               <TableRow>
                 <TableCell colSpan={8} align="center">
-                  No orders yet
+                  No orders yet 
                 </TableCell>
               </TableRow>
             )}

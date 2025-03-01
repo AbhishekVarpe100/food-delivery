@@ -20,7 +20,7 @@ function UserCart() {
     <>
     <div className="p-6">
   <div className="text-lg font-bold mb-4">
-    Cart items added by user: <span className="text-blue-500">{username}</span>
+    Cart items added by user: <span className="text-yellow-500">{username}</span>
     <div>Total items : {data.length}</div>
   </div>
 

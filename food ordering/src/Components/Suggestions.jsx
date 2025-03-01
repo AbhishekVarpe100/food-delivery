@@ -60,7 +60,7 @@ function Suggestions() {
         <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
             {/* Post Suggestions Section */}
             <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>Post Suggestions</Typography>
+                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: 'warning.main' }}>Post Suggestions</Typography>
                 <form onSubmit={handleSubmit}>
                     <TextField
                         fullWidth
@@ -73,13 +73,13 @@ function Suggestions() {
                         placeholder="Enter your suggestion..."
                         sx={{ mb: 2 }}
                     />
-                    <Button type="submit" fullWidth variant="contained" color="primary" sx={{ py: 1.5 }}>Post</Button>
+                    <Button type="submit" fullWidth variant="contained" color="warning" sx={{ py: 1.5 }}>Post</Button>
                 </form>
             </Paper>
 
             {/* Your Suggestions Section */}
             <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>Your Suggestions</Typography>
+                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: 'warning.main' }}>Your Suggestions</Typography>
                 {data.length !== 0 ? (
                     <List>
                         {data.map((suggestion) => (
@@ -99,7 +99,7 @@ function Suggestions() {
                                             </Tooltip>
                                             <Link to={`/main_home/suggestions/edit/${suggestion._id}`}>
                                                 <Tooltip title="Edit" arrow placement="top">
-                                                    <IconButton color="primary" size="small">
+                                                    <IconButton  size="small">
                                                         <EditIcon />
                                                     </IconButton>
                                                 </Tooltip>
@@ -133,7 +133,7 @@ function Suggestions() {
 
             {/* Other Suggestions Section */}
             <Paper elevation={3} sx={{ p: 3 }}>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>Other Suggestions</Typography>
+                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: 'warning.main' }}>Other Suggestions</Typography>
                 {dataOther.length !== 0 ? (
                     <List>
                         {dataOther.map((suggestion) => (

@@ -51,12 +51,12 @@ function AddItem() {
           <TextField label="Price" name="price" required onChange={handleChange} fullWidth />
           <TextField label="Quantity" name="quantity" required onChange={handleChange} fullWidth />
 
-          <Button variant="contained" component="label" startIcon={<CloudUploadIcon />}>
+          <Button color='warning' variant="contained" component="label" startIcon={<CloudUploadIcon />}>
             Upload Image
             <input required type="file" hidden onChange={(e) => setFile(e.target.files[0])} />
           </Button>
 
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+          <Button type="submit" variant="outlined" color="warning" fullWidth>
             Add Item
           </Button>
         </Box>

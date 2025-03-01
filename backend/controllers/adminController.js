@@ -45,7 +45,8 @@ exports.updateQuantity = async (req, res) => {
 
 exports.getData = async (req, res) => {
   const data = await Food.find().limit(3);
-  res.json(data);
+  const totalItems=await Food.find()
+  res.json({data:data,total:totalItems.length});
 };
 
 exports.updatePrice = async (req, res) => {
