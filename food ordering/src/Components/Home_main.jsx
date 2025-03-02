@@ -121,9 +121,9 @@ const HomeMain = () => {
       </Drawer>
 
       {/* Main Content */}
-      <Box className="flex-1 p-4 md:p-8">
-        <Outlet />
-      </Box>
+      <Box className="flex-1 p-4 md:p-0 md:py-8 md:pr-8">
+  <Outlet />
+</Box>
     </Box>
   );
 };
