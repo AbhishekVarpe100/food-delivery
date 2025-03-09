@@ -54,18 +54,17 @@ function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-200 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 z-0 bg-gray-100">
-        <div className="ball bg-red-500"></div>
-        <div className="ball bg-blue-500"></div>
-        <div className="ball bg-green-500"></div>
-        <div className="ball bg-yellow-500"></div>
-        <div className="ball bg-purple-500"></div>
+    <div className="flex items-center justify-center min-h-screen relative overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0 bg-cover bg-center" 
+        style={{
+          backgroundImage: `url('https://im.whatshot.in/img/2020/Apr/41215842-2062970037054645-8180165235601047552-o-baan-tao-cropped-1586780385.jpg')`,
+          filter: "brightness(0.5)", // Faint effect
+        }}>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="relative z-10 max-w-md p-6 bg-white rounded-lg shadow-lg space-y-4">
+      <form onSubmit={handleSubmit} className="relative z-10 max-w-md p-6 bg-white bg-opacity-90 rounded-lg shadow-lg space-y-4">
         <strong className="text-xl font-semibold">Register</strong>
 
         <AnimatePresence>

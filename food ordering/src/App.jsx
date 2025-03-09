@@ -26,6 +26,7 @@ import Fav from './Components/Fav'
 import Suggestions from './Components/Suggestions'
 import EditSuggestion from './Components/EditSuggestion'
 
+
 function App() {
 
   return (
@@ -74,6 +75,7 @@ function App() {
     </Routes>
 
     </BrowserRouter>
+
       
     </>
   )
