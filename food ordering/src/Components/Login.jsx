@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Alert } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion'; // Import Framer Motion
+import { motion, AnimatePresence } from 'framer-motion';
 
 function Login() {
   const [user, setUser] = useState({
@@ -12,17 +12,23 @@ function Login() {
     password: '',
   });
   const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = async (e) => {
-    const { name, value } = await e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccess('');
+    setError('');
+
     try {
       const res = await axios.post('http://localhost:3000/login', user);
+
+      // Store user details in localStorage
       localStorage.setItem('token', `bearer ${res.data.token}`);
       localStorage.setItem('username', res.data.username);
       localStorage.setItem('email', res.data.email);
@@ -30,28 +36,20 @@ function Login() {
       if (res.data.message === 'login successful') {
         setSuccess('Login successful');
         setTimeout(() => {
-          setSuccess('');
-          setTimeout(() => {
-            navigate('/main_home');
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
-          }, 1000);
-        }, 4000);
-      } else if (res.data === 'admin') {
-        setSuccess('Login successful');
+          navigate('/main_home');
+          window.location.reload();
+        }, 2000);
+      } else if (res.data.message === 'admin') {
+        setSuccess('Admin login successful');
         setTimeout(() => {
-          setSuccess('');
-          setTimeout(() => {
-            navigate('/admin');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }, 500);
-        }, 4000);
+          navigate('/admin');
+          window.location.reload();
+        }, 2000);
+      } else {
+        setError('Unexpected response from server.');
       }
-    } catch (error) {
-      alert(error);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     }
   };
 
@@ -73,7 +71,7 @@ function Login() {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay for better text contrast
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
           zIndex: 0,
         }}
       ></div>
@@ -97,16 +95,30 @@ function Login() {
       >
         <h2 style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold' }}>Login</h2>
 
-        {/* Success Alert with Smooth Animation */}
+        {/* Success Alert */}
         <AnimatePresence>
           {success && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              <Alert variant='filled' severity="success">{success}</Alert>
+              <Alert variant="filled" severity="success">{success}</Alert>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Error Alert */}
+        <AnimatePresence>
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Alert variant="filled" severity="error">{error}</Alert>
             </motion.div>
           )}
         </AnimatePresence>
@@ -128,13 +140,14 @@ function Login() {
           label="Password"
           variant="standard"
           fullWidth
+          disabled={user.username === 'admin'} // Disable password field if username is admin
         />
 
         <Button
           variant="contained"
           fullWidth
           type="submit"
-          style={{ backgroundColor: '#3b82f6', hover: { backgroundColor: '#2563eb' } }}
+          style={{ backgroundColor: '#3b82f6' }}
         >
           Login
         </Button>

@@ -34,29 +34,75 @@ exports.register=async(req,res)=>{
 
 
 
-exports.login=async(req,res)=>{
-    let user=await User.find({username:req.body.username})
+// exports.login=async(req,res)=>{
+//     let user=await User.find({username:req.body.username})
 
-    if(req.body.username!='admin'){
-        const isCompare=await bcrypt.compare(req.body.password,user[0].password)
-        if(isCompare){
-            jwt.sign({username:user.username,email:user.email},secretKey,{expiresIn:'1h'},(err,token)=>{
-                if(err){
-                    console.log(err)    
-                }
-                else{
-                    res.json({token,message:"login successful",username:user[0].username,email:user[0].email})
-                }
-            })
+//     if(req.body.username!='admin'){
+//         const isCompare=await bcrypt.compare(req.body.password,user[0].password)
+//         if(isCompare){
+//             jwt.sign({username:user.username,email:user.email},secretKey,{expiresIn:'1h'},(err,token)=>{
+//                 if(err){
+//                     console.log(err)    
+//                 }
+//                 else{
+//                     res.json({token,message:"login successful",username:user[0].username,email:user[0].email})
+//                 }
+//             })
+//         }
+//         else{
+//             res.json('Incorrect password')
+//         }
+//     }
+//     else{
+//         res.json("admin")
+//     }
+// }
+
+exports.login = async (req, res) => {
+    try {
+        if (req.body.username === 'admin') {
+            return res.json({
+                token: "admin-token",
+                message: "admin",
+                username: "admin",
+                email: "admin@example.com"
+            });
         }
-        else{
-            res.json('Incorrect password')
+
+        let user = await User.findOne({ username: req.body.username });
+
+        if (!user) {
+            return res.status(400).json({ message: "Invalid username or password" });
         }
+
+        const isCompare = await bcrypt.compare(req.body.password, user.password);
+        if (!isCompare) {
+            return res.status(400).json({ message: "Invalid username or password" });
+        }
+
+        jwt.sign(
+            { username: user.username, email: user.email },
+            secretKey,
+            { expiresIn: '1h' },
+            (err, token) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({ message: "Internal server error" });
+                }
+                res.json({
+                    token,
+                    message: "login successful",
+                    username: user.username,
+                    email: user.email
+                });
+            }
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
     }
-    else{
-        res.json("admin")
-    }
-}
+};
+
 
 
 exports.getHome=async(req,res)=>{
