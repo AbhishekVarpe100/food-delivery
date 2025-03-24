@@ -66,48 +66,60 @@ router.get('/get-all-likes',userController.getAllLikes)
 
 router.post("/send-mail", async (req, res) => {
   const { email: to } = req.body;
-
+  
   const subject = "Welcome to Food Ordering Service!";
-  const text =
-    "Thank you for joining us. We are excited to have you onboard and look forward to serving you.";
-
+  const text = "Thank you for joining us. We are excited to have you onboard and look forward to serving you.";
+  
   if (!validator.isEmail(to)) {
     return res.status(400).send("Invalid email address");
   }
-
+  
   const mailOptions = {
     from: "abhishekvarpe8@gmail.com",
     to,
     subject,
     html: `
-            <div style="font-family: 'Arial', sans-serif; line-height: 1.8; color: #333333; max-width: 600px; margin: 0 auto; border: 1px solid #dddddd; border-radius: 8px; padding: 20px; background-color: #f9f9f9; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);">
-                <div style="text-align: center; border-bottom: 1px solid #dddddd; padding-bottom: 15px; margin-bottom: 20px;">
-                    <h1 style="color: #2c3e50; font-size: 24px; margin: 0;">Welcome to Food Ordering Service!</h1>
-                    <p style="color: #7f8c8d; font-size: 16px; margin: 5px 0;">The best place for all your food cravings</p>
-                </div>
-                <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
-                    Dear Valued Customer,<br/><br/>
-                    Thank you for registering with <strong>Food Ordering Service</strong>. We are thrilled to have you as part of our growing community of food lovers. Our mission is to provide you with a seamless experience in exploring and ordering from the best restaurants in your area.
-                </p>
-                <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
-                    You can now start browsing through our menu, placing orders, and enjoying exclusive offers tailored just for you. Our team is committed to ensuring a delightful and hassle-free service every time.
-                </p>
-                
-            </div>
-        `,
+      <div style="font-family: 'Georgia', serif; line-height: 1.6; color: #2a2a2a; max-width: 600px; margin: 0 auto; border: 1px solid #d4c1a0; border-radius: 0; padding: 25px; background-color: #f9f6f0;">
+        <div style="text-align: center; border-bottom: 2px solid #d4c1a0; padding-bottom: 20px; margin-bottom: 25px;">
+          <h1 style="color: #703f22; font-size: 28px; margin: 0; font-weight: normal; font-family: 'Times New Roman', Times, serif;">Food Ordering Service</h1>
+          <p style="color: #996633; font-size: 16px; margin: 10px 0; font-style: italic;">Fine Dining Delivered to Your Door</p>
+        </div>
+        
+        <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
+          Dear Valued Customer,
+        </p>
+        
+        <p style="font-size: 16px; color: #333333; margin-bottom: 20px; text-indent: 30px;">
+          Thank you for becoming a member of the <em>Food Ordering Service</em> family. We are delighted to welcome you to our distinguished community of culinary enthusiasts. Our establishment has been serving discerning customers since its founding, with an unwavering commitment to quality and excellence.
+        </p>
+        
+        <p style="font-size: 16px; color: #333333; margin-bottom: 20px; text-indent: 30px;">
+          You may now peruse our carefully curated selection of fine establishments, place your orders with ease, and enjoy the exceptional dining experience that has become our hallmark. Our dedicated staff stands ready to ensure your complete satisfaction with every interaction.
+        </p>
+        
+        <div style="text-align: center; margin: 30px 0; border-top: 1px solid #d4c1a0; border-bottom: 1px solid #d4c1a0; padding: 15px 0;">
+          <p style="font-family: 'Times New Roman', Times, serif; font-size: 18px; font-style: italic; color: #703f22; margin: 0;">
+            "Good food is the foundation of genuine happiness."
+          </p>
+        </div>
+        
+        <p style="font-size: 16px; color: #333333; margin-bottom: 20px; text-align: right;">
+          With warm regards,<br>
+          <em>The Food Ordering Service Team</em>
+        </p>
+        
+        <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #996633;">
+          <p>Est. 2025 | A Tradition of Excellence</p>
+        </div>
+      </div>
+    `,
   };
-
-  //   Send the email
+  
+  // Send the email
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) return res.status(500).send(`Error: ${err.message}`);
     res.json("success");
   });
-
-  // Send the email
-  //   transporter.sendMail({ from: 'abhishekvarpe8@gmail.com', to, subject, text }, (err, info) => {
-  // if (err) return res.status(500).send(`Error: ${err.message}`);
-  //     res.json('success')
-  //   });
 });
 
 const razorpay = new Razorpay({

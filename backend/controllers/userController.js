@@ -245,11 +245,11 @@ exports.searchItem=async(req,res)=>{
 }
 
 exports.addFav=async(req,res)=>{
-    const username=req.body.username
-    const {name,file,price}=req.body[0];
+    const {name,file,price,username}=req.body
     const newFav=new Fav({username,file,price:Number(price),name})
     newFav.save()
     res.json('added')
+   
 }
 
 exports.getFav=async(req,res)=>{
