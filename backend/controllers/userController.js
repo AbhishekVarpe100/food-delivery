@@ -10,6 +10,7 @@ const Suggestion = require('../models/Suggestion');
 const secretKey='food-delivery-web-app';
 const axios=require('axios');
 const Likes = require('../models/Likes');
+const Razorpay=require('razorpay')
 exports.register=async(req,res)=>{
     const {username,email,password}=req.body;
     const error=validationResult(req);
@@ -357,4 +358,28 @@ exports.getAllLikes=async function(req,res){
 
     }
 }
+
+
+const razorpay = new Razorpay({
+    key_id: "rzp_test_mzNTcsoUKTuELO", // Replace with your Razorpay Key ID
+    key_secret: "PmZVaaLvOUN3D31xEGwE5tML", // Replace with your Razorpay Secret Key
+  });
+
+exports.processPayment=async function(req,res){
+        const { price } = req.body; 
+        try {
+          const order = await razorpay.orders.create({
+            amount: price * 100, // Convert INR to paise
+            currency: "INR",
+            payment_capture: 1,
+          });
+      
+          res.json({ order }); // Ensure correct format
+        } catch (error) {
+          console.error("Error creating Razorpay order:", error);
+          res.status(500).json({ error: "Error creating Razorpay order" });
+        }
+      };
+      
+
 
