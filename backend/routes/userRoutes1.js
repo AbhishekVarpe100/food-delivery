@@ -63,6 +63,7 @@ router.put('/edit-suggestion/:id',userController.editSuggestion)
 router.post('/like-suggestion',userController.likeSuggestion)
 router.get('/get-all-likes',userController.getAllLikes)
 router.post('/create-order',userController.processPayment)
+router.post('/handle-cash-on-delivery',userController.handleCashOnDelivery)
 
 
 router.post("/send-mail", async (req, res) => {

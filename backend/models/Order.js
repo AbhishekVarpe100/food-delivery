@@ -52,6 +52,9 @@ const orderSchema=new Schema({
         type:Boolean,
         default:false
     },
+    payment:{
+        type:String,
+    }
 
 })
 

@@ -367,6 +367,8 @@ const razorpay = new Razorpay({
 
 exports.processPayment=async function(req,res){
         const { price } = req.body; 
+        const {name,phone,item,quantity,address}=JSON.parse(req.body.orderData)
+        await Order.updateOne({cust_name:name,mobile:phone,addr:address,item_name:item,price,quantity},{$set:{payment:'paid'}})
         try {
           const order = await razorpay.orders.create({
             amount: price * 100, // Convert INR to paise
@@ -380,6 +382,14 @@ exports.processPayment=async function(req,res){
           res.status(500).json({ error: "Error creating Razorpay order" });
         }
       };
+
+
+exports.handleCashOnDelivery=async function(req,res){
+    const {name,phone,item,price,quantity,address}=JSON.parse(req.body.item)
+    console.log(name,phone,item,price,quantity,address)
+    await Order.updateOne({cust_name:name,mobile:phone,addr:address,item_name:item,price,quantity},{$set:{payment:'cash on delivery'}})
+    res.json('confirmed')
+}
       
 
 

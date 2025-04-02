@@ -1,22 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  Button, 
+  Typography, 
+  Container, 
+  Box, 
+  CircularProgress, 
+  Chip
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import InfoIcon from '@mui/icons-material/Info';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PaidIcon from '@mui/icons-material/Paid';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
 function Orders_cust() {
-  const [data, setdata] = useState([]);
+  const [data, setData] = useState([]);
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getData = async () => {
-    const res = await axios.get('http://localhost:3000/get-orders', {
-      params: { username: localStorage.getItem('username') },
-    });
-    setdata(res.data);
+    try {
+      setLoading(true);
+      const res = await axios.get('http://localhost:3000/get-orders', {
+        params: { username: localStorage.getItem('username') },
+      });
+      setData(res.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = async (id) => {
-    const res = await axios.delete(`http://localhost:3000/delete-order/${id}`);
-    if (res.data === 'deleted') {
-      setSuccess((prev) => !prev);
+    try {
+      const res = await axios.delete(`http://localhost:3000/delete-order/${id}`);
+      if (res.data === 'deleted') {
+        setSuccess((prev) => !prev);
+      }
+    } catch (error) {
+      console.error('Error deleting order:', error);
     }
   };
 
@@ -25,99 +57,110 @@ function Orders_cust() {
   }, [success]);
 
   return (
-    <div className="overflow-x-auto p-8 bg-gray-50 min-h-screen">
-  {/* Table Title */}
-  <h1 className="text-3xl font-serif text-gray-900 mb-6 text-center">
-    My Orders
-  </h1>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+        <Typography 
+          variant="h4" 
+          component="h1" 
+          align="center" 
+          gutterBottom 
+          sx={{ 
+            mb: 4, 
+            fontFamily: 'serif', 
+            color: 'primary.main',
+            fontWeight: 'medium'
+          }}
+        >
+          My Orders
+        </Typography>
 
-  {/* Table */}
-  <table className="min-w-full border border-gray-200 bg-white shadow-sm rounded-lg overflow-hidden">
-    {/* Table Header */}
-    <thead className="bg-gray-800">
-      <tr>
-        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
-          Item Name
-        </th>
-        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
-          Quantity
-        </th>
-        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
-          Total Price
-        </th>
-        <th className="border border-gray-700 px-6 py-4 text-left text-sm font-medium text-white uppercase tracking-wider">
-          Action
-        </th>
-      </tr>
-    </thead>
-
-    {/* Table Body */}
-    <tbody>
-      {data.length > 0 ? (
-        data.map((item, index) => (
-          <tr
-            key={index}
-            className={`${
-              index % 2 === 0 ? "bg-gray-50" : "bg-white"
-            } hover:bg-gray-100 transition duration-200`}
-          >
-            {/* Item Name */}
-            <td className="border border-gray-200 px-6 py-4 text-gray-800 font-medium">
-              {item.item_name}
-            </td>
-
-            {/* Quantity */}
-            <td className="border border-gray-200 px-6 py-4 text-gray-800">
-              {item.quantity}
-            </td>
-
-            {/* Total Price */}
-            <td className="border border-gray-200 px-6 py-4 text-gray-800">
-              {item.price} Rs.
-            </td>
-
-            {/* Actions */}
-            <td className="border border-gray-200 px-6 py-4">
-              <div className="flex flex-col items-center gap-3">
-                {/* Delete Button */}
-                <button
-                  onClick={() => handleDelete(item._id)}
-                  className="w-full max-w-[120px] py-2 px-4 text-white bg-red-500 hover:bg-red-600 rounded-md transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  Delete
-                </button>
-
-                {/* Item Status Link */}
-                <Link
-                  to={`/main_home/orders/status/${item._id}`}
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium underline transition duration-200"
-                >
-                  Item Status
-                </Link>
-
-                {/* Delivery Status */}
-                {item.delivered && (
-                  <span className="text-green-600 font-medium text-sm">
-                    Item Delivered Successfully
-                  </span>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <TableContainer component={Paper} elevation={2}>
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: 'primary.main' }}>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Item Name</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Quantity</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Total Price</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Action</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Payment</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.length > 0 ? (
+                  data.map((item, index) => (
+                    <TableRow 
+                      key={index}
+                      sx={{ 
+                        '&:nth-of-type(odd)': { backgroundColor: 'rgba(0, 0, 0, 0.03)' },
+                        '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.07)' },
+                        transition: 'background-color 0.2s'
+                      }}
+                    >
+                      <TableCell sx={{ fontWeight: 'medium' }}>{item.item_name}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell>{item.price} Rs.</TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          <Button 
+                            variant="contained" 
+                            color="error" 
+                            size="small"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            Delete
+                          </Button>
+                          
+                          <Button
+                            component={Link}
+                            to={`/main_home/orders/status/${item._id}`}
+                            variant="outlined" 
+                            color="primary"
+                            size="small"
+                            startIcon={<InfoIcon />}
+                          >
+                            Item Status
+                          </Button>
+                          
+                          {item.delivered && (
+                            <Chip
+                              icon={<CheckCircleIcon />}
+                              label="Item Delivered Successfully"
+                              color="success"
+                              size="small"
+                              sx={{ mt: 1 }}
+                            />
+                          )}
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          icon={item.payment === 'paid' ? <PaidIcon /> : <LocalShippingIcon />}
+                          label={item.payment === 'paid' ? 'Paid' : 'Cash on Delivery'}
+                          color={item.payment === 'paid' ? 'info' : 'default'}
+                          variant="outlined"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center" sx={{ py: 4, fontStyle: 'italic', color: 'text.secondary' }}>
+                      You have not ordered anything yet...!
+                    </TableCell>
+                  </TableRow>
                 )}
-              </div>
-            </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td
-            colSpan="4"
-            className="border border-gray-200 px-6 py-4 text-center text-gray-500 italic"
-          >
-            You have not ordered anything yet...!
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</div>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </Paper>
+    </Container>
   );
 }
 

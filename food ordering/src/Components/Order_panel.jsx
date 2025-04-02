@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import notificationSound from './notification_sound.mp3';
 
 function OrderPanel() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ function OrderPanel() {
   const [rsp, setRsp] = useState(false);
   const [ui_, setUi] = useState(false);
   const [price, setPrice] = useState(0);
+  const [playAudio,setPlayAudio]=useState(false)
 
   useEffect(() => {
     const getData = async () => {
@@ -68,8 +70,10 @@ function OrderPanel() {
     };
 
     try {
-      const res = await axios.post('http://localhost:3000/confirm-order', item);
+      const res = await axios.post('http://localhost:3000/confirm-order',item);
       if (res.data) {
+        localStorage.setItem('orderData', JSON.stringify({ name: name_, phone: num, item: data.name, price, quantity, av_quantity: data.quantity, address: addr, file: data.file }));
+
         alert("Order confirmed. Proceed to Payment.");
         setUi(true);
       }
@@ -78,10 +82,17 @@ function OrderPanel() {
     }
     setRsp(false);
   };
+  
+  const handleCashOnDelivery=async()=>{
+    const res=await axios.post('http://localhost:3000/handle-cash-on-delivery',{item:localStorage.getItem('orderData')})
+    if(res.data){
+      navigate('/main_home')
+    }
+  }
 
   const handlePayment = async () => {
     try {
-      const { data } = await axios.post("http://localhost:3000/create-order", { price: price }); // Converting to paise
+      const { data } = await axios.post("http://localhost:3000/create-order", { price: price,orderData:localStorage.getItem('orderData')}); // Converting to paise
       const isScriptLoaded = await loadRazorpayScript();
 
       if (!isScriptLoaded) {
@@ -97,7 +108,8 @@ function OrderPanel() {
         description: "Test Transaction",
         order_id: data.order.id,
         handler: function (response) {
-          alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+          const audio=new Audio(notificationSound)
+          audio.play()
           navigate('/main_home')
         },
         theme: { color: "#1976D2" },
@@ -111,15 +123,21 @@ function OrderPanel() {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      {ui_ ? (
+      {ui_ ? (<>
         <button
           onClick={handlePayment}
           className="bg-blue-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-700 transition"
         >
           {rsp ? "Processing..." : `Pay Now ₹${price || data.price}`}
         </button>
+        <button onClick={handleCashOnDelivery}>Cash on delivery</button>
+
+        {/* <audio src={notificationSound}></audio> */}
+
+        </>
       ) : (
         data.quantity > 0 ? (
           <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
